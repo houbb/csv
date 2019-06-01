@@ -1,9 +1,7 @@
 package com.github.houbb.csv.api;
 
-import java.io.File;
-
 /**
- * 读取转换器，将 string=>field
+ * 读取转换器，将 string 转换为 field
  * @author binbin.hou
  * @since 0.0.1
  * @param <T> 泛型

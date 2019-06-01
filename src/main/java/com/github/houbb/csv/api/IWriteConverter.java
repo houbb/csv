@@ -1,7 +1,7 @@
 package com.github.houbb.csv.api;
 
 /**
- * 读取转换器，将 field=>string
+ * 读取转换器，将 field 转换为 string
  * @author binbin.hou
  * @since 0.0.1
  * @param <T> 泛型
