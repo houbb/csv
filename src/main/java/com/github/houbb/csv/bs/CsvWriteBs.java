@@ -3,6 +3,7 @@ package com.github.houbb.csv.bs;
 import com.github.houbb.csv.api.ICsv;
 import com.github.houbb.csv.support.context.DefaultWriteContext;
 import com.github.houbb.csv.support.csv.DefaultCsv;
+import com.github.houbb.heaven.constant.CharsetConst;
 import com.github.houbb.heaven.support.sort.ISort;
 import com.github.houbb.heaven.support.sort.impl.NoSort;
 
@@ -11,7 +12,7 @@ import java.util.List;
 /**
  * csv 写入引导类
  * @author binbin.hou
- * @since 1.0.0
+ * @since 0.0.1
  */
 public class CsvWriteBs {
     /**
@@ -27,7 +28,7 @@ public class CsvWriteBs {
     /**
      * 指定文件编码
      */
-    private String charset = "UTF-8";
+    private String charset = CharsetConst.UTF8;
 
     /**
      * 指定排序方式
@@ -86,6 +87,7 @@ public class CsvWriteBs {
                 .list(list)
                 .writeHead(writeHead)
                 .writeBom(writeBom)
+                .path(path)
                 .sort(sort);
 
         ICsv<T> csv = new DefaultCsv<>();

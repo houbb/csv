@@ -3,6 +3,7 @@ package com.github.houbb.csv.bs;
 import com.github.houbb.csv.api.ICsv;
 import com.github.houbb.csv.support.context.DefaultReadContext;
 import com.github.houbb.csv.support.csv.DefaultCsv;
+import com.github.houbb.heaven.constant.CharsetConst;
 import com.github.houbb.heaven.support.sort.ISort;
 import com.github.houbb.heaven.support.sort.impl.NoSort;
 
@@ -11,7 +12,7 @@ import java.util.List;
 /**
  * csv 读取引导类
  * @author binbin.hou
- * @since 1.0.0
+ * @since 0.0.1
  */
 public class CsvReadBs {
 
@@ -23,12 +24,13 @@ public class CsvReadBs {
     /**
      * 指定文件编码
      */
-    private String charset = "UTF-8";
+    private String charset = CharsetConst.UTF8;
 
     /**
      * 开始下标
+     * 1. 跳过第一行的 head
      */
-    private int startIndex = 0;
+    private int startIndex = 1;
 
     /**
      * 结束下标
@@ -73,6 +75,16 @@ public class CsvReadBs {
 
     public CsvReadBs path(String path) {
         this.path = path;
+        return this;
+    }
+
+    public CsvReadBs startIndex(int startIndex) {
+        this.startIndex = startIndex;
+        return this;
+    }
+
+    public CsvReadBs endIndex(int endIndex) {
+        this.endIndex = endIndex;
         return this;
     }
 

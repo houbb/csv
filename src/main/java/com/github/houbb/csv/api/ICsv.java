@@ -3,8 +3,10 @@ package com.github.houbb.csv.api;
 import java.util.List;
 
 /**
+ * CSV 读写接口
  * @author binbin.hou
- * @since 1.0.0
+ * @since 0.0.1
+ * @param <T> 泛型
  */
 public interface ICsv<T> {
 

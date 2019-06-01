@@ -5,8 +5,10 @@ import com.github.houbb.heaven.support.sort.ISort;
 import java.util.List;
 
 /**
+ * 写入上下文
  * @author binbin.hou
- * @since 1.0.0
+ * @since 0.0.1
+ * @param <T> 泛型
  */
 public interface IWriteContext<T> {
 

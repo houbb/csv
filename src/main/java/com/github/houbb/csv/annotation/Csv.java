@@ -2,20 +2,21 @@ package com.github.houbb.csv.annotation;
 
 import com.github.houbb.csv.api.IReadConverter;
 import com.github.houbb.csv.api.IWriteConverter;
-import com.github.houbb.csv.support.convert.read.StringReadConverter;
+import com.github.houbb.csv.support.convert.read.CommonReadConverter;
 import com.github.houbb.csv.support.convert.write.StringWriteConverter;
 
 import java.lang.annotation.*;
 
 /**
+ * CSV 注解
  * @author binbin.hou
- * @since 1.0.0
+ * @since 0.0.1
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 @Target(ElementType.FIELD)
-public @interface CSV {
+public @interface Csv {
 
     /**
      * 读取是否需要
@@ -40,7 +41,7 @@ public @interface CSV {
      * 读取转换
      * @return 处理实现类
      */
-    Class<? extends IReadConverter> readConverter() default StringReadConverter.class;
+    Class<? extends IReadConverter> readConverter() default CommonReadConverter.class;
 
     /**
      * 写入转换

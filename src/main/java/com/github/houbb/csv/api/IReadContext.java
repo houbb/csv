@@ -3,8 +3,10 @@ package com.github.houbb.csv.api;
 import com.github.houbb.heaven.support.sort.ISort;
 
 /**
+ * 读取上下文
  * @author binbin.hou
- * @since 1.0.0
+ * @since 0.0.1
+ * @param <T> 泛型
  */
 public interface IReadContext<T> {
 

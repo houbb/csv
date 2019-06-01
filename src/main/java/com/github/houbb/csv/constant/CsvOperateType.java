@@ -3,9 +3,9 @@ package com.github.houbb.csv.constant;
 /**
  * csv 操作类型
  * @author binbin.hou
- * @since 1.0.0
+ * @since 0.0.1
  */
-public enum CsvOperType {
+public enum CsvOperateType {
 
     /**
      * 读取
@@ -15,6 +15,7 @@ public enum CsvOperType {
     /**
      * 写入
      */
-    WRITE;
+    WRITE,
+    ;
 
 }

@@ -1,12 +1,14 @@
 package com.github.houbb.csv.support.csv;
 
-import com.github.houbb.csv.annotation.CSV;
+import com.github.houbb.csv.annotation.Csv;
 import com.github.houbb.csv.api.*;
-import com.github.houbb.csv.constant.CsvOperType;
+import com.github.houbb.csv.constant.CsvOperateType;
+import com.github.houbb.csv.support.convert.read.CommonReadConverter;
 import com.github.houbb.csv.support.convert.write.StringWriteConverter;
 import com.github.houbb.heaven.constant.PunctuationConst;
 import com.github.houbb.heaven.reflect.model.FieldBean;
 import com.github.houbb.heaven.response.exception.CommonRuntimeException;
+import com.github.houbb.heaven.support.instance.impl.InstanceFactory;
 import com.github.houbb.heaven.support.sort.ISort;
 import com.github.houbb.heaven.util.guava.Guavas;
 import com.github.houbb.heaven.util.lang.ObjectUtil;
@@ -17,6 +19,7 @@ import com.github.houbb.heaven.util.util.CollectionUtil;
 import com.github.houbb.heaven.util.util.MapUtil;
 import com.github.houbb.heaven.util.util.Optional;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.charset.Charset;
@@ -25,57 +28,55 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
  * 默认的 csv 处理实现
+ *
+ * @param <T> 泛型
  * @author binbin.hou
- * @since 1.0.0
+ * @since 0.0.1
  */
 public class DefaultCsv<T> implements ICsv<T> {
 
     /**
      * UTF_BOM 行信息，避免 excel 打开乱码
      */
-    private static final String UTF_BOM_LINE = new String(new byte[] { (byte) 0xEF, (byte) 0xBB,(byte) 0xBF });
+    private static final byte[] UTF_BOM_BYTES = new byte[]{(byte) 0xEF, (byte) 0xBB, (byte) 0xBF};
 
     @Override
     public void write(IWriteContext<T> context) {
         final List<T> writeList = context.list();
-        if(CollectionUtil.isEmpty(writeList)) {
+        if (CollectionUtil.isEmpty(writeList)) {
             return;
         }
         final Optional<T> firstOpt = CollectionUtil.firstNotNullElem(writeList);
-        if(!firstOpt.isNotPresent()) {
+        if (firstOpt.isNotPresent()) {
             return;
         }
         final T elem = firstOpt.get();
         final List<FieldBean> fieldBeanList = getSortedFields(elem.getClass(),
-                context.sort(), CsvOperType.WRITE);
+                context.sort(), CsvOperateType.WRITE);
         if (CollectionUtil.isEmpty(fieldBeanList)) {
             return;
         }
 
-        // 默认额外+2行，用于存储 bom 和头信息
-        final int size = context.list().size()+2;
+        // 默认额外+1行，用于存储头信息
+        final int size = context.list().size() + 1;
         List<String> list = Guavas.newArrayList(size);
 
-        // 1.1 写入 bom 头(只需要第一次写入即可)
-        if(context.writeBom()) {
-            list.add(UTF_BOM_LINE);
-        }
+
         // 1.2 处理头信息
-        if(context.writeHead()) {
+        if (context.writeHead()) {
             String headLine = buildWriteHead(fieldBeanList);
             list.add(headLine);
         }
 
         // 1.3 构建每一行的内容
-        for(T t : writeList) {
+        for (T t : writeList) {
             Optional<String> writeLine = buildWriteLine(t, fieldBeanList);
-            if(writeLine.isNotPresent()) {
+            if (writeLine.isNotPresent()) {
                 continue;
             }
             list.add(writeLine.get());
@@ -85,6 +86,24 @@ public class DefaultCsv<T> implements ICsv<T> {
             //2. 统一写入文件
             // 默认使用添加的方式写入，后期再开放这个开关
             Path path = Paths.get(context.path());
+            //2.1 创建父类文件夹
+            File parent = path.getParent().toFile();
+            if (!parent.exists()) {
+                parent.mkdirs();
+            }
+
+            //2.2 创建文件
+            File file = path.toFile();
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+
+            //2.3 写入
+            // 2.3.1 写入 bom 头(只需要第一次写入即可)
+            if (context.writeBom()) {
+                Files.write(path, UTF_BOM_BYTES, StandardOpenOption.APPEND);
+            }
+            // 2.3.2 写入实际内容
             Files.write(path, list, Charset.forName(context.charset()), StandardOpenOption.APPEND);
         } catch (IOException e) {
             throw new CommonRuntimeException(e);
@@ -94,22 +113,23 @@ public class DefaultCsv<T> implements ICsv<T> {
     /**
      * 构建待写行
      * 1. 将需要写入的字段内容用逗号分隔。
-     * @param t 元素
+     *
+     * @param t          元素
      * @param fieldBeans 字段列表
      * @return 结果
      */
     private Optional<String> buildWriteLine(final T t,
                                             final List<FieldBean> fieldBeans) {
-        if(ObjectUtil.isNull(t)) {
+        if (ObjectUtil.isNull(t)) {
             return Optional.empty();
         }
         List<String> stringList = Guavas.newArrayList(fieldBeans.size());
 
         IWriteConverter converter = new StringWriteConverter();
         try {
-            for(FieldBean bean : fieldBeans) {
-                final Optional<CSV> csvOptional = bean.annotationOptByType(CSV.class);
-                if(csvOptional.isPresent()) {
+            for (FieldBean bean : fieldBeans) {
+                final Optional<Csv> csvOptional = bean.annotationOptByType(Csv.class);
+                if (csvOptional.isPresent()) {
                     converter = csvOptional.get().writeConverter().newInstance();
                 }
                 final Object object = bean.field().get(t);
@@ -129,20 +149,21 @@ public class DefaultCsv<T> implements ICsv<T> {
      * 构建表头
      * （1）指定注解，且 label 不为空，则使用 label
      * （2）使用 field.name()
-     *
+     * <p>
      * 所有字段 label 通过逗号连接。
+     *
      * @param fieldBeanList 元素列表
      * @return 对应的 head 字符串
      */
     private String buildWriteHead(List<FieldBean> fieldBeanList) {
         List<String> headList = Guavas.newArrayList(fieldBeanList.size());
 
-        for(FieldBean bean : fieldBeanList) {
+        for (FieldBean bean : fieldBeanList) {
             String name = bean.name();
-            Optional<CSV> csvOptional = bean.annotationOptByType(CSV.class);
-            if(csvOptional.isPresent()) {
+            Optional<Csv> csvOptional = bean.annotationOptByType(Csv.class);
+            if (csvOptional.isPresent()) {
                 String label = csvOptional.get().label();
-                if(StringUtil.isNotEmpty(label)) {
+                if (StringUtil.isNotEmpty(label)) {
                     name = label;
                 }
             }
@@ -189,7 +210,7 @@ public class DefaultCsv<T> implements ICsv<T> {
                     final Field field = readMapping.get(i).field();
 
                     final Object object = convertReadValue(value, field);
-                    field.set(object, instance);
+                    field.set(instance, object);
                 }
 
                 list.add(instance);
@@ -202,16 +223,17 @@ public class DefaultCsv<T> implements ICsv<T> {
 
     /**
      * 获取排序后的字段
+     *
      * @param tClass 类
-     * @param sort 排序
-     * @param type 操作方式
+     * @param sort   排序
+     * @param type   操作方式
      * @return 列表
      */
     public List<FieldBean> getSortedFields(final Class tClass,
                                            final ISort sort,
-                                           final CsvOperType type) {
+                                           final CsvOperateType type) {
         List<Field> allFields = ClassUtil.getAllFieldList(tClass);
-        if(CollectionUtil.isEmpty(allFields)) {
+        if (CollectionUtil.isEmpty(allFields)) {
             return Collections.emptyList();
         }
 
@@ -223,15 +245,15 @@ public class DefaultCsv<T> implements ICsv<T> {
         //2. 有注解，但是 require=false 则跳过。
         List<FieldBean> resultList = Guavas.newArrayList(sortedFields.size());
         for (Field field : sortedFields) {
-            CSV csv = null;
-            if (field.isAnnotationPresent(CSV.class)) {
-                csv = field.getAnnotation(CSV.class);
-                if (CsvOperType.READ.equals(type)
-                    && !csv.readRequire()) {
+            Csv csv = null;
+            if (field.isAnnotationPresent(Csv.class)) {
+                csv = field.getAnnotation(Csv.class);
+                if (CsvOperateType.READ.equals(type)
+                        && !csv.readRequire()) {
                     continue;
                 }
-                if(CsvOperType.WRITE.equals(type)
-                    && !csv.writeRequire()) {
+                if (CsvOperateType.WRITE.equals(type)
+                        && !csv.writeRequire()) {
                     continue;
                 }
             }
@@ -255,9 +277,9 @@ public class DefaultCsv<T> implements ICsv<T> {
      * @return 映射关系
      */
     private Map<Integer, FieldBean> getReadMapping(final Class<T> tClass,
-                                               final ISort sort) {
+                                                   final ISort sort) {
         List<FieldBean> sortedFields = this.getSortedFields(tClass, sort,
-                CsvOperType.READ);
+                CsvOperateType.READ);
 
         return MapUtil.toIndexMap(sortedFields);
     }
@@ -289,16 +311,22 @@ public class DefaultCsv<T> implements ICsv<T> {
      */
     private Object convertReadValue(final String csvContent, final Field field) {
         try {
-            if (field.isAnnotationPresent(CSV.class)) {
-                CSV csv = field.getAnnotation(CSV.class);
+            // 字段类型
+            final Class fieldType = field.getType();
+
+            // 指定转换器的处理
+            if (field.isAnnotationPresent(Csv.class)) {
+                Csv csv = field.getAnnotation(Csv.class);
                 Class<? extends IReadConverter> readConverterClass = csv.readConverter();
-                return readConverterClass.newInstance().convert(csvContent);
+                return readConverterClass.newInstance().convert(csvContent, fieldType);
             }
 
-            // 直接返回消息本身
-            return csvContent;
+            // 通用转换器的处理
+            return InstanceFactory.getInstance()
+                    .singleton(CommonReadConverter.class)
+                    .convert(csvContent, fieldType);
         } catch (InstantiationException | IllegalAccessException e) {
-           throw new CommonRuntimeException(e);
+            throw new CommonRuntimeException(e);
         }
     }
 

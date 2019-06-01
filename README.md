@@ -20,7 +20,7 @@
 
 - 基于 java annotation
 
-- 读写的灵活指定
+- 字段类型转换的灵活支持，内置 8 大基本类型以及 String 类型转换
 
 # 快速开始
 
@@ -32,4 +32,91 @@ maven 3.x
 
 ## 示例代码
 
--
+- User.java
+
+演示基本类型的转换
+
+```java
+public class User {
+
+    private String name;
+
+    private int age;
+
+    private float score;
+
+    private double money;
+
+    private boolean sex;
+
+    private short level;
+
+    private long id;
+
+    private char status;
+
+    private byte coin;
+
+    //Getter & Setter & toString()
+}
+```
+
+- 对象列表构建
+
+```java
+    /**
+     * 构建通用测试列表
+     * @return 列表
+     */
+    private List<User> buildCommonList() {
+        User user = new User();
+        short s = 4;
+        byte b = 1;
+        user.age(10)
+        .name("你好")
+        .id(1L)
+        .score(60)
+        .coin(b)
+        .level(s)
+        .money(200)
+        .sex(true)
+        .status('Y');
+        return Arrays.asList(user);
+    }
+```
+
+### 写入
+
+- 测试代码
+
+```java
+public void commonTest() {
+    final String path = "src\\test\\resources\\common.csv";
+    CsvWriteBs.newInstance(path)
+            .write(buildCommonList());
+}
+```
+
+- 文件生成
+
+```csv
+name,age,score,money,sex,level,id,status,coin
+你好,10,60.0,200.0,true,4,1,Y,1
+```
+
+### 读取
+
+```java
+public void commonTest() {
+    final String path = "src\\test\\resources\\common.csv";
+    List<User> userList = CsvReadBs.newInstance(path)
+            .read(User.class);
+    System.out.println(userList);
+}
+```
+
+- 日志信息
+
+```
+[User{name='你好', age=10, score=60.0, money=200.0, sex=true, level=4, id=1, status=Y, coin=1}]
+```

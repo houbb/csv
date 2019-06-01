@@ -4,8 +4,10 @@ import com.github.houbb.csv.api.IReadContext;
 import com.github.houbb.heaven.support.sort.ISort;
 
 /**
+ * 默认读取上下文
  * @author binbin.hou
- * @since 1.0.0
+ * @since 0.0.1
+ * @param <T> 泛型
  */
 public class DefaultReadContext<T> implements IReadContext<T> {
 
