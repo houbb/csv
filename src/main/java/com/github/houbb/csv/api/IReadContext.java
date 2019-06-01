@@ -30,7 +30,6 @@ public interface IReadContext<T> {
 
     /**
      * 读取的类型
-     * @param <T> 泛型
      * @return 类型
      */
     Class<T> readClass();
