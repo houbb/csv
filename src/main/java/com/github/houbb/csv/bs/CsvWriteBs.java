@@ -1,10 +1,10 @@
 package com.github.houbb.csv.bs;
 
 import com.github.houbb.csv.api.ICsv;
-import com.github.houbb.csv.api.ISort;
 import com.github.houbb.csv.support.context.DefaultWriteContext;
 import com.github.houbb.csv.support.csv.DefaultCsv;
-import com.github.houbb.csv.support.sort.NoSort;
+import com.github.houbb.heaven.support.sort.ISort;
+import com.github.houbb.heaven.support.sort.impl.NoSort;
 
 import java.util.List;
 

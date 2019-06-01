@@ -1,7 +1,7 @@
 package com.github.houbb.csv.support.context;
 
-import com.github.houbb.csv.api.ISort;
 import com.github.houbb.csv.api.IWriteContext;
+import com.github.houbb.heaven.support.sort.ISort;
 
 import java.util.List;
 
@@ -74,7 +74,7 @@ public class DefaultWriteContext<T> implements IWriteContext<T> {
     }
 
     @Override
-    public List list() {
+    public List<T> list() {
         return list;
     }
 

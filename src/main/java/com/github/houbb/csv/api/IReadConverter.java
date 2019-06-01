@@ -7,6 +7,11 @@ package com.github.houbb.csv.api;
  */
 public interface IReadConverter<T> {
 
+    /**
+     * 执行转换
+     * @param value 字符串值
+     * @return 结果
+     */
     T convert(final String value);
 
 }

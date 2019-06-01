@@ -1,11 +1,10 @@
 package com.github.houbb.csv.bs;
 
 import com.github.houbb.csv.api.ICsv;
-import com.github.houbb.csv.api.IReadContext;
-import com.github.houbb.csv.api.ISort;
 import com.github.houbb.csv.support.context.DefaultReadContext;
 import com.github.houbb.csv.support.csv.DefaultCsv;
-import com.github.houbb.csv.support.sort.NoSort;
+import com.github.houbb.heaven.support.sort.ISort;
+import com.github.houbb.heaven.support.sort.impl.NoSort;
 
 import java.util.List;
 
@@ -84,15 +83,15 @@ public class CsvReadBs {
      * @return 列表
      */
     public <T> List<T> read(Class<T> tClass) {
-        DefaultReadContext<T> context = new DefaultReadContext<T>();
+        DefaultReadContext<T> context = new DefaultReadContext<>();
         context.charset(charset)
                 .path(path)
                 .startIndex(startIndex)
                 .endIndex(endIndex)
-                .readClass(tClass)
-                .sort(sort);
+                .sort(sort)
+                .readClass(tClass);
 
-        final ICsv<T> csv = new DefaultCsv<T>();
+        final ICsv<T> csv = new DefaultCsv<>();
         return csv.read(context);
     }
 

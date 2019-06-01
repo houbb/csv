@@ -1,5 +1,7 @@
 package com.github.houbb.csv.api;
 
+import com.github.houbb.heaven.support.sort.ISort;
+
 import java.util.List;
 
 /**
@@ -42,6 +44,6 @@ public interface IWriteContext<T> {
      * 待写入的列表
      * @return 待写入的列表
      */
-    List<?> list();
+    List<T> list();
 
 }

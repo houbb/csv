@@ -1,7 +1,7 @@
 package com.github.houbb.csv.support.context;
 
 import com.github.houbb.csv.api.IReadContext;
-import com.github.houbb.csv.api.ISort;
+import com.github.houbb.heaven.support.sort.ISort;
 
 /**
  * @author binbin.hou
@@ -60,7 +60,7 @@ public class DefaultReadContext<T> implements IReadContext<T> {
         return readClass;
     }
 
-    public DefaultReadContext<T> readClass(Class<T> readClass) {
+    public DefaultReadContext<T> readClass(Class readClass) {
         this.readClass = readClass;
         return this;
     }

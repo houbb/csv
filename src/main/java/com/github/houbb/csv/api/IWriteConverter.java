@@ -7,6 +7,11 @@ package com.github.houbb.csv.api;
  */
 public interface IWriteConverter<T> {
 
+    /**
+     * 执行转换
+     * @param value 对象值
+     * @return 字符串
+     */
     String convert(final T value);
 
 }
