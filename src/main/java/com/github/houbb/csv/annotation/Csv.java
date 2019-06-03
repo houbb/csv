@@ -19,6 +19,13 @@ import java.lang.annotation.*;
 public @interface Csv {
 
     /**
+     * 字段显示名称
+     * 1. 默认使用 field.name
+     * @return 显示名称
+     */
+    String label() default "";
+
+    /**
      * 读取是否需要
      * @return 是
      */
@@ -29,13 +36,6 @@ public @interface Csv {
      * @return 是
      */
     boolean writeRequire() default true;
-
-    /**
-     * 字段显示名称
-     * 1. 默认使用 field.name
-     * @return 显示名称
-     */
-    String label() default "";
 
     /**
      * 读取转换

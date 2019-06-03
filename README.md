@@ -12,13 +12,21 @@
 
 最近一个月写了两次 csv 文件相关的东西，发现要处理的细节还是有的，还浪费比较多的时间。
 
-于是自己封装一套，便于以后使用。
+比如：
+
+1. UTF-8 中文编码使用 excel 打开乱码，因为缺少 BOM 头。
+
+2. 不同类型字段转化为字符串，顺序的指定，head 头的指定，如果手写都会很繁琐。
+
+3. 读取的时候最后 `,` 后无元素，split 会缺失等。
+
+为了解决上述问题，此框架应运而生。
 
 ## 特性
 
 - Fluent 流式写法
 
-- 基于 java annotation
+- 基于 java 注解
 
 - 字段类型转换的灵活支持，内置 8 大基本类型以及 String 类型转换
 
@@ -29,6 +37,16 @@
 jdk7+
 
 maven 3.x
+
+## maven 引入
+
+```xml
+<dependency>
+    <groupId>com.github.houbb</groupId>
+    <artifactId>csv</artifactId>
+    <version>0.0.2</version>
+</dependency>
+```
 
 ## 示例代码
 
@@ -120,3 +138,9 @@ public void commonTest() {
 ```
 [User{name='你好', age=10, score=60.0, money=200.0, sex=true, level=4, id=1, status=Y, coin=1}]
 ```
+
+# 拓展阅读
+
+[CSV 引导类方法说明](doc/user/01-csv-引导类.md)
+
+[CSV 字段注解的使用](doc/user/02-csv-注解使用.md)

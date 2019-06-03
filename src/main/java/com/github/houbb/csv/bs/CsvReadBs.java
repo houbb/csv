@@ -17,11 +17,6 @@ import java.util.List;
 public class CsvReadBs {
 
     /**
-     * 是否写入 bom
-     */
-    private boolean writeBom = true;
-
-    /**
      * 指定文件编码
      */
     private String charset = CharsetConst.UTF8;
@@ -56,11 +51,6 @@ public class CsvReadBs {
         CsvReadBs csvBs = new CsvReadBs();
         csvBs.path(path);
         return csvBs;
-    }
-
-    public CsvReadBs writeBom(boolean writeBom) {
-        this.writeBom = writeBom;
-        return this;
     }
 
     public CsvReadBs charset(String charset) {
