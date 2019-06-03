@@ -28,6 +28,7 @@ public class CsvWriteBsTest {
      * @since 0.0.2
      */
     @Test
+    @Ignore
     public void annotationTest() {
         final String path = "src\\test\\resources\\annotation.csv";
         CsvWriteBs.newInstance(path)
