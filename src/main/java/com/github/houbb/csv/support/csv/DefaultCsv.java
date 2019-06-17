@@ -4,11 +4,13 @@ import com.github.houbb.csv.annotation.Csv;
 import com.github.houbb.csv.api.*;
 import com.github.houbb.csv.constant.CsvOperateType;
 import com.github.houbb.csv.support.convert.read.CommonReadConverter;
+import com.github.houbb.csv.support.convert.write.CommonWriteConverter;
 import com.github.houbb.csv.support.convert.write.StringWriteConverter;
 import com.github.houbb.heaven.constant.PunctuationConst;
 import com.github.houbb.heaven.reflect.model.FieldBean;
 import com.github.houbb.heaven.response.exception.CommonRuntimeException;
 import com.github.houbb.heaven.support.instance.impl.InstanceFactory;
+import com.github.houbb.heaven.support.instance.impl.Instances;
 import com.github.houbb.heaven.support.sort.ISort;
 import com.github.houbb.heaven.util.guava.Guavas;
 import com.github.houbb.heaven.util.lang.ObjectUtil;
@@ -27,6 +29,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -125,7 +128,7 @@ public class DefaultCsv<T> implements ICsv<T> {
         }
         List<String> stringList = Guavas.newArrayList(fieldBeans.size());
 
-        IWriteConverter converter = new StringWriteConverter();
+        IWriteConverter converter = Instances.singletion(CommonWriteConverter.class);
         try {
             for (FieldBean bean : fieldBeans) {
                 final Optional<Csv> csvOptional = bean.annotationOptByType(Csv.class);
@@ -156,7 +159,7 @@ public class DefaultCsv<T> implements ICsv<T> {
      * @return 对应的 head 字符串
      */
     private String buildWriteHead(List<FieldBean> fieldBeanList) {
-        List<String> headList = Guavas.newArrayList(fieldBeanList.size());
+        Collection<String> headList = Guavas.newArrayList(fieldBeanList.size());
 
         for (FieldBean bean : fieldBeanList) {
             String name = bean.name();
@@ -311,20 +314,17 @@ public class DefaultCsv<T> implements ICsv<T> {
      */
     private Object convertReadValue(final String csvContent, final Field field) {
         try {
-            // 字段类型
-            final Class fieldType = field.getType();
-
             // 指定转换器的处理
             if (field.isAnnotationPresent(Csv.class)) {
                 Csv csv = field.getAnnotation(Csv.class);
                 Class<? extends IReadConverter> readConverterClass = csv.readConverter();
-                return readConverterClass.newInstance().convert(csvContent, fieldType);
+                return readConverterClass.newInstance().convert(csvContent, field);
             }
 
             // 通用转换器的处理
             return InstanceFactory.getInstance()
                     .singleton(CommonReadConverter.class)
-                    .convert(csvContent, fieldType);
+                    .convert(csvContent, field);
         } catch (InstantiationException | IllegalAccessException e) {
             throw new CommonRuntimeException(e);
         }

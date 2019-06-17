@@ -26,9 +26,13 @@
 
 - Fluent 流式写法
 
-- 基于 java 注解
+- 基于 java 注解，支持自定义的转换和灵活配置
 
-- 字段类型转换的灵活支持，内置 8 大基本类型以及 String 类型转换
+- 内置 8 大基本类型以及 String 类型转换
+
+- 解决 Excel 直接打开，utf-8 乱码问题
+
+- 内置支持集合、数组、Map 的存取
 
 # 快速开始
 
@@ -44,7 +48,7 @@ maven 3.x
 <dependency>
     <groupId>com.github.houbb</groupId>
     <artifactId>csv</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
 </dependency>
 ```
 
@@ -141,6 +145,8 @@ public void commonTest() {
 
 # 拓展阅读
 
-[CSV 引导类方法说明](doc/user/01-csv-引导类.md)
+[01-CSV 引导类方法说明](doc/user/01-csv-引导类.md)
 
-[CSV 字段注解的使用](doc/user/02-csv-注解使用.md)
+[02-CSV 字段注解的使用](doc/user/02-csv-注解使用.md)
+
+[03-CSV 集合相关支持](doc/user/03-csv-支持集合类.md)

@@ -1,5 +1,7 @@
 package com.github.houbb.csv.api;
 
+import java.lang.reflect.Field;
+
 /**
  * 读取转换器，将 string 转换为 field
  * @author binbin.hou
@@ -11,10 +13,9 @@ public interface IReadConverter<T> {
     /**
      * 执行转换
      * @param value 字符串值
-     * @param fieldType 字段类型
+     * @param field 字段类型
      * @return 结果
      */
-    T convert(final String value,
-              final Class fieldType);
+    T convert(final String value, final Field field);
 
 }

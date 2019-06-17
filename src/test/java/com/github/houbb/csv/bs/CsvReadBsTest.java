@@ -2,6 +2,7 @@ package com.github.houbb.csv.bs;
 
 import com.github.houbb.csv.model.User;
 import com.github.houbb.csv.model.UserAnnotation;
+import com.github.houbb.csv.model.UserCollection;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -33,5 +34,16 @@ public class CsvReadBsTest {
         System.out.println(userList);
     }
 
+    /**
+     * 集合特性
+     * @since 0.0.3
+     */
+    @Test
+    public void collectionTest() {
+        final String path = "src\\test\\resources\\collection.csv";
+        List<UserCollection> userList = CsvReadBs.newInstance(path)
+                .read(UserCollection.class);
+        System.out.println(userList);
+    }
 
 }

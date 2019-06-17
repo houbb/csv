@@ -2,12 +2,12 @@ package com.github.houbb.csv.bs;
 
 import com.github.houbb.csv.model.User;
 import com.github.houbb.csv.model.UserAnnotation;
+import com.github.houbb.csv.model.UserCollection;
+import com.github.houbb.heaven.util.lang.StringUtil;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author binbin.hou
@@ -35,6 +35,17 @@ public class CsvWriteBsTest {
                 .write(buildAnnotationList());
     }
 
+    /**
+     * 集合测试
+     * @since 0.0.3
+     */
+    @Test
+    @Ignore
+    public void collectionTest() {
+        final String path = "src\\test\\resources\\collection.csv";
+        CsvWriteBs.newInstance(path)
+                .write(buildCollectionList());
+    }
 
     /**
      * 构建通用测试列表
@@ -65,6 +76,29 @@ public class CsvWriteBsTest {
         user.name("你好")
                 .password("123")
                 .birthday(new Date());
+        return Arrays.asList(user);
+    }
+
+    /**
+     * 构建基于集合的测试列表
+     * @return 列表
+     * @since 0.0.3
+     */
+    private List<UserCollection> buildCollectionList() {
+        UserCollection user = new UserCollection();
+        String[] arrays = new String[]{"a", "b", "c"};
+        LinkedList<String> lists = new LinkedList<>(Arrays.asList(arrays));
+        Map<String, String> maps = new HashMap<>();
+        maps.put("key", "value");
+        maps.put("key2", "value2");
+        Set<String> sets = new HashSet<>();
+        sets.add("set1");
+        sets.add("set2");
+
+        user.setLists(lists);
+        user.setArrays(arrays);
+        user.setMaps(maps);
+        user.setSets(sets);
         return Arrays.asList(user);
     }
 

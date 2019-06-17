@@ -3,6 +3,7 @@ package com.github.houbb.csv.convert;
 import com.github.houbb.csv.api.IReadConverter;
 import com.github.houbb.heaven.util.util.DateUtil;
 
+import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,7 +17,7 @@ import java.util.Date;
 public class ReadDateConvert implements IReadConverter<Date> {
 
     @Override
-    public Date convert(String value, Class fieldType) {
+    public Date convert(String value, final Field field) {
         try {
             DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
             return dateFormat.parse(value);
