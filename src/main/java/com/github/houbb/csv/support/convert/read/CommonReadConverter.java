@@ -1,6 +1,7 @@
 package com.github.houbb.csv.support.convert.read;
 
 import com.github.houbb.csv.api.IReadConverter;
+import com.github.houbb.csv.support.context.SingleReadContext;
 import com.github.houbb.csv.support.convert.read.collection.ArrayReadConverter;
 import com.github.houbb.csv.support.convert.read.collection.CollectionReadConverter;
 import com.github.houbb.csv.support.convert.read.collection.MapReadConverter;
@@ -13,7 +14,6 @@ import com.github.houbb.heaven.util.lang.ObjectUtil;
 import com.github.houbb.heaven.util.lang.StringUtil;
 import com.github.houbb.heaven.util.lang.reflect.ClassTypeUtil;
 import com.github.houbb.heaven.util.lang.reflect.PrimitiveUtil;
-import com.github.houbb.heaven.util.util.ArrayUtil;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -25,7 +25,7 @@ import java.util.Map;
  * @since 0.0.1
  */
 @ThreadSafe
-public class CommonReadConverter implements IReadConverter<Object>, ITypeConverter<Object> {
+public class CommonReadConverter implements IReadConverter<Object> {
 
     /**
      * 转换器映射关系
@@ -45,7 +45,10 @@ public class CommonReadConverter implements IReadConverter<Object>, ITypeConvert
     }
 
     @Override
-    public Object convert(String value, final Field field) {
+    public Object convert(final SingleReadContext context) {
+        final String value = context.value();
+        final Field field = context.field();
+
         //1. 为空判断
         if(StringUtil.isEmpty(value)) {
             return null;
@@ -57,23 +60,27 @@ public class CommonReadConverter implements IReadConverter<Object>, ITypeConvert
         //2 特殊集合的处理
         // 2.1 数组
         if(ClassTypeUtil.isArray(refType)) {
-            return Instances.singletion(ArrayReadConverter.class).convert(value, field);
+            return Instances.singletion(ArrayReadConverter.class).convert(context);
         }
         // 2.2 map
         if(ClassTypeUtil.isMap(refType)) {
-            return Instances.singletion(MapReadConverter.class).convert(value, field);
+            return Instances.singletion(MapReadConverter.class).convert(context);
         }
         // 2.3 collection
         if(ClassTypeUtil.isCollection(refType)) {
-            return Instances.singletion(CollectionReadConverter.class).convert(value, field);
+            return Instances.singletion(CollectionReadConverter.class).convert(context);
         }
 
         // 3. 基本类型
-        return convert(value, refType);
+        return this.convert(value, refType);
     }
 
-
-    @Override
+    /**
+     * 根据类型进行转换
+     * @param value 字符串的值
+     * @param type 字段的类型
+     * @return 转换的结果
+     */
     public Object convert(String value, final Class type) {
         //1. 快速返回
         if(StringUtil.isEmpty(value)

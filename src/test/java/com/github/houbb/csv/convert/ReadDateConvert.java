@@ -1,9 +1,8 @@
 package com.github.houbb.csv.convert;
 
 import com.github.houbb.csv.api.IReadConverter;
-import com.github.houbb.heaven.util.util.DateUtil;
+import com.github.houbb.csv.support.context.SingleReadContext;
 
-import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -17,10 +16,10 @@ import java.util.Date;
 public class ReadDateConvert implements IReadConverter<Date> {
 
     @Override
-    public Date convert(String value, final Field field) {
+    public Date convert(SingleReadContext context) {
         try {
             DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-            return dateFormat.parse(value);
+            return dateFormat.parse(context.value());
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }

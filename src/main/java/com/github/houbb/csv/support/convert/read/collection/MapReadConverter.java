@@ -1,6 +1,8 @@
 package com.github.houbb.csv.support.convert.read.collection;
 
 import com.github.houbb.csv.api.IReadConverter;
+import com.github.houbb.csv.constant.CsvConst;
+import com.github.houbb.csv.support.context.SingleReadContext;
 import com.github.houbb.csv.support.convert.read.CommonReadConverter;
 import com.github.houbb.heaven.response.exception.CommonRuntimeException;
 import com.github.houbb.heaven.support.instance.impl.Instances;
@@ -12,7 +14,6 @@ import com.github.houbb.heaven.util.util.ArrayUtil;
 
 import java.lang.reflect.Field;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -23,9 +24,12 @@ import java.util.Map;
 public class MapReadConverter implements IReadConverter<Map> {
 
     @Override
-    public Map convert(String value, Field field) {
+    public Map convert(SingleReadContext context) {
+        final String value = context.value();
+        final Field field = context.field();
+
         //entry
-        String[] entryStrings = value.split("\\|");
+        String[] entryStrings = value.split(CsvConst.SPLIT_OR);
         if(ArrayUtil.isEmpty(entryStrings)) {
             return Collections.emptyMap();
         }

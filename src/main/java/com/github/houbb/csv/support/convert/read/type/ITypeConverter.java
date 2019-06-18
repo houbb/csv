@@ -1,7 +1,5 @@
 package com.github.houbb.csv.support.convert.read.type;
 
-import java.lang.reflect.Field;
-
 /**
  * 根据类型进行转换
  * @author binbin.hou

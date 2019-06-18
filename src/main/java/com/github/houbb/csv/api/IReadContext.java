@@ -20,7 +20,7 @@ public interface IReadContext<T> {
      * 排序方式
      * @return 排序方式
      */
-    ISort sort();
+    ISort<T> sort();
 
     /**
      * 文件路径

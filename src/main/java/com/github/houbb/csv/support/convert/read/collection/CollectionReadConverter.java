@@ -1,6 +1,8 @@
 package com.github.houbb.csv.support.convert.read.collection;
 
 import com.github.houbb.csv.api.IReadConverter;
+import com.github.houbb.csv.constant.CsvConst;
+import com.github.houbb.csv.support.context.SingleReadContext;
 import com.github.houbb.csv.support.convert.read.CommonReadConverter;
 import com.github.houbb.heaven.support.instance.impl.Instances;
 import com.github.houbb.heaven.util.guava.Guavas;
@@ -19,8 +21,11 @@ import java.util.Collection;
 public class CollectionReadConverter implements IReadConverter<Collection> {
 
     @Override
-    public Collection convert(String value, Field field) {
-        final String[] entrys = value.split("\\|");
+    public Collection convert(SingleReadContext context) {
+        final String value = context.value();
+        final Field field = context.field();
+
+        final String[] entrys = value.split(CsvConst.SPLIT_OR);
 
         Collection collection = getCollection(field.getType(), entrys.length);
         final Class componentType = ReflectFieldUtil.getComponentType(field);

@@ -1,6 +1,6 @@
 package com.github.houbb.csv.api;
 
-import java.lang.reflect.Field;
+import com.github.houbb.csv.support.context.SingleReadContext;
 
 /**
  * 读取转换器，将 string 转换为 field
@@ -12,10 +12,9 @@ public interface IReadConverter<T> {
 
     /**
      * 执行转换
-     * @param value 字符串值
-     * @param field 字段类型
+     * @param context 上下文
      * @return 结果
      */
-    T convert(final String value, final Field field);
+    T convert(final SingleReadContext<T> context);
 
 }

@@ -3,7 +3,7 @@ package com.github.houbb.csv.annotation;
 import com.github.houbb.csv.api.IReadConverter;
 import com.github.houbb.csv.api.IWriteConverter;
 import com.github.houbb.csv.support.convert.read.CommonReadConverter;
-import com.github.houbb.csv.support.convert.write.StringWriteConverter;
+import com.github.houbb.csv.support.convert.write.CommonWriteConverter;
 
 import java.lang.annotation.*;
 
@@ -47,6 +47,6 @@ public @interface Csv {
      * 写入转换
      * @return 处理实现类
      */
-    Class<? extends IWriteConverter> writeConverter() default StringWriteConverter.class;
+    Class<? extends IWriteConverter> writeConverter() default CommonWriteConverter.class;
 
 }

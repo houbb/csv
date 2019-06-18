@@ -13,7 +13,7 @@ public class DefaultReadContext<T> implements IReadContext<T> {
 
     private String charset;
 
-    private ISort sort;
+    private ISort<T> sort;
 
     private String path;
 
@@ -38,11 +38,11 @@ public class DefaultReadContext<T> implements IReadContext<T> {
     }
 
     @Override
-    public ISort sort() {
+    public ISort<T> sort() {
         return sort;
     }
 
-    public DefaultReadContext<T> sort(ISort sort) {
+    public DefaultReadContext<T> sort(ISort<T> sort) {
         this.sort = sort;
         return this;
     }
@@ -62,7 +62,7 @@ public class DefaultReadContext<T> implements IReadContext<T> {
         return readClass;
     }
 
-    public DefaultReadContext<T> readClass(Class readClass) {
+    public DefaultReadContext<T> readClass(Class<T> readClass) {
         this.readClass = readClass;
         return this;
     }
