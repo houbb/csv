@@ -34,7 +34,7 @@ public class CsvReadBsTest {
         List<UserAnnotation> userList = CsvReadBs.newInstance(path)
                 .read(UserAnnotation.class);
 
-        final String result = "[UserAnnotation{name='你好', password='null', birthday=Mon Jun 03 00:00:00 CST 2019}]";
+        final String result = "[UserAnnotation{name='你好', password='null', birthday=Tue Jun 18 00:00:00 CST 2019}]";
         Assert.assertEquals(result, userList.toString());
     }
 
