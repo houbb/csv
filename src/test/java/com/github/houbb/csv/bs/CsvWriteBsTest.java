@@ -3,7 +3,6 @@ package com.github.houbb.csv.bs;
 import com.github.houbb.csv.model.User;
 import com.github.houbb.csv.model.UserAnnotation;
 import com.github.houbb.csv.model.UserCollection;
-import com.github.houbb.heaven.util.lang.StringUtil;
 import org.junit.Ignore;
 import org.junit.Test;
 

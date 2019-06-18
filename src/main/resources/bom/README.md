@@ -43,8 +43,14 @@ PHP并不会忽略BOM，所以在读取、包含或者引用这些文件时，�
 
 # 不同编码的对应 bom
 
+```
 
+```
 
 # 参考资料
 
 [中文乱码详解](https://www.cnblogs.com/lzmrex/p/9832086.html)
+
+[大端小端,ascii,unicode,utf8,utf16,utf32,gb2312,gbk,gb18030等字符编码问题](https://blog.csdn.net/ztsinghua/article/details/44277833)
+
+[常见编码和编码头BOM](https://www.cnblogs.com/signheart/p/c3b1000186199e89d4e02c33f39ed418.html)

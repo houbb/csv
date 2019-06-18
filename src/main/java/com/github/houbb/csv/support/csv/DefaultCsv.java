@@ -9,6 +9,7 @@ import com.github.houbb.csv.support.context.SingleReadContext;
 import com.github.houbb.csv.support.context.SingleWriteContext;
 import com.github.houbb.csv.support.convert.read.entry.EntryReadConverter;
 import com.github.houbb.csv.support.convert.write.entry.EntryWriteConverter;
+import com.github.houbb.csv.util.CsvBomUtil;
 import com.github.houbb.csv.util.CsvFieldUtil;
 import com.github.houbb.heaven.constant.PunctuationConst;
 import com.github.houbb.heaven.reflect.model.FieldBean;
@@ -41,13 +42,9 @@ import java.util.Map;
  */
 public class DefaultCsv<T> implements ICsv<T> {
 
-    /**
-     * UTF_BOM 行信息，避免 excel 打开乱码
-     */
-    private static final byte[] UTF_BOM_BYTES = new byte[]{(byte) 0xEF, (byte) 0xBB, (byte) 0xBF};
-
     @Override
     public void write(IWriteContext<T> context) {
+
         final List<T> writeList = context.list();
         if (CollectionUtil.isEmpty(writeList)) {
             return;
@@ -61,29 +58,6 @@ public class DefaultCsv<T> implements ICsv<T> {
                 context.sort(), CsvOperateType.WRITE);
         if (CollectionUtil.isEmpty(fieldBeanList)) {
             return;
-        }
-
-        // 默认额外+1行，用于存储头信息
-        final int size = context.list().size() + 1;
-        List<String> list = Guavas.newArrayList(size);
-
-        // 1.2 处理头信息
-        if (context.writeHead()) {
-            String headLine = buildWriteHead(fieldBeanList);
-            list.add(headLine);
-        }
-
-        // 1.3 构建每一行的内容
-        EntryWriteConverter<T> entryWriteConverter = new EntryWriteConverter<>();
-        SingleWriteContext<T> singleWriteContext = new SingleWriteContext<>();
-        singleWriteContext.sort(context.sort());
-        for (T t : writeList) {
-            singleWriteContext.element(t);
-            final String writeLine = entryWriteConverter.convert(singleWriteContext);
-            if (StringUtil.isEmpty(writeLine)) {
-                continue;
-            }
-            list.add(writeLine);
         }
 
         try {
@@ -102,13 +76,44 @@ public class DefaultCsv<T> implements ICsv<T> {
                 file.createNewFile();
             }
 
-            //2.3 写入
-            // 2.3.1 写入 bom 头(只需要第一次写入即可)
-            if (context.writeBom()) {
-                Files.write(path, UTF_BOM_BYTES, StandardOpenOption.APPEND);
+            //2.3 写入（首先记录状态，然后写入信息）
+            // 2.3.1 写入 bom 头(只需要第一次写入即可，且文件内容为空。)
+            final String charset = context.charset();
+            final byte[] bomBytes = CsvBomUtil.getBom(charset);
+            boolean needWriteBoom = context.writeBom() && file.length() <= 0;
+            // 只有 bom 头的情况下写入
+            boolean needWriteHead = context.writeHead() && file.length() <= bomBytes.length;
+
+            if (needWriteBoom) {
+                Files.write(path, bomBytes, StandardOpenOption.APPEND);
             }
-            // 2.3.2 写入实际内容
-            Files.write(path, list, Charset.forName(context.charset()), StandardOpenOption.APPEND);
+
+            // 默认额外+1行，用于存储头信息
+            final int size = context.list().size() + 1;
+            List<String> list = Guavas.newArrayList(size);
+
+            // 2.3.2 写入头信息
+            if(needWriteHead) {
+                // 只有头信息不存在时，才重复写入头信息。
+                String headLine = buildWriteHead(fieldBeanList);
+                list.add(headLine);
+            }
+
+            // 1.3 构建每一行的内容
+            EntryWriteConverter<T> entryWriteConverter = new EntryWriteConverter<>();
+            SingleWriteContext<T> singleWriteContext = new SingleWriteContext<>();
+            singleWriteContext.sort(context.sort());
+            for (T t : writeList) {
+                singleWriteContext.element(t);
+                final String writeLine = entryWriteConverter.convert(singleWriteContext);
+                if (StringUtil.isEmpty(writeLine)) {
+                    continue;
+                }
+                list.add(writeLine);
+            }
+
+            // 2.3.3 写入实际内容
+            Files.write(path, list, Charset.forName(charset), StandardOpenOption.APPEND);
         } catch (IOException e) {
             throw new CommonRuntimeException(e);
         }
@@ -118,7 +123,7 @@ public class DefaultCsv<T> implements ICsv<T> {
      * 构建表头
      * （1）指定注解，且 label 不为空，则使用 label
      * （2）使用 field.name()
-     * <p>
+     *
      * 所有字段 label 通过逗号连接。
      *
      * @param fieldBeanList 元素列表
