@@ -44,7 +44,6 @@ public class DefaultCsv<T> implements ICsv<T> {
 
     @Override
     public void write(IWriteContext<T> context) {
-
         final List<T> writeList = context.list();
         if (CollectionUtil.isEmpty(writeList)) {
             return;
@@ -100,8 +99,8 @@ public class DefaultCsv<T> implements ICsv<T> {
             }
 
             // 1.3 构建每一行的内容
-            EntryWriteConverter<T> entryWriteConverter = new EntryWriteConverter<>();
-            SingleWriteContext<T> singleWriteContext = new SingleWriteContext<>();
+            EntryWriteConverter entryWriteConverter = new EntryWriteConverter();
+            SingleWriteContext singleWriteContext = new SingleWriteContext();
             singleWriteContext.sort(context.sort());
             for (T t : writeList) {
                 singleWriteContext.element(t);

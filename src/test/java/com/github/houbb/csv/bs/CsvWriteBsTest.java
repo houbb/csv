@@ -3,6 +3,7 @@ package com.github.houbb.csv.bs;
 import com.github.houbb.csv.model.User;
 import com.github.houbb.csv.model.UserAnnotation;
 import com.github.houbb.csv.model.UserCollection;
+import com.github.houbb.csv.model.UserEntry;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -12,6 +13,7 @@ import java.util.*;
  * @author binbin.hou
  * @since 0.0.1
  */
+@Ignore
 public class CsvWriteBsTest {
 
     @Test
@@ -44,6 +46,18 @@ public class CsvWriteBsTest {
         final String path = "src\\test\\resources\\collection.csv";
         CsvWriteBs.newInstance(path)
                 .write(buildCollectionList());
+    }
+
+    /**
+     * 构建明细信息测试
+     * @since 0.0.5
+     */
+    @Test
+    @Ignore
+    public void entryTest() {
+        final String path = "src\\test\\resources\\entry.csv";
+        CsvWriteBs.newInstance(path)
+                .write(buildEntryList());
     }
 
     /**
@@ -101,4 +115,15 @@ public class CsvWriteBsTest {
         return Arrays.asList(user);
     }
 
+    /**
+     * 用户明细列表
+     * @return 明细列表
+     * @since 0.0.5
+     */
+    private List<UserEntry> buildEntryList() {
+        UserEntry userEntry = new UserEntry();
+        userEntry.name("test");
+        userEntry.user(buildCommonList().get(0));
+        return Collections.singletonList(userEntry);
+    }
 }

@@ -34,11 +34,11 @@ import java.util.List;
  * @since 0.0.4
  */
 @ThreadSafe
-public class EntryWriteConverter<T> implements IWriteConverter<SingleWriteContext<T>> {
+public class EntryWriteConverter implements IWriteConverter {
 
     @Override
-    public String convert(SingleWriteContext<T> context) {
-        final T value = context.element();
+    public String convert(SingleWriteContext context) {
+        final Object value = context.element();
         if (ObjectUtil.isNull(value)) {
             return StringUtil.EMPTY;
         }
@@ -50,23 +50,26 @@ public class EntryWriteConverter<T> implements IWriteConverter<SingleWriteContex
             return StringUtil.EMPTY;
         }
 
-        return buildWriteLine(value, fieldBeanList);
+        return buildWriteLine(context, value, fieldBeanList);
     }
 
     /**
      * 构建待写行
      * 1. 将需要写入的字段内容用逗号分隔。
      *
+     * @param context 上下文
      * @param t 元素
      * @param fieldBeans 字段列表
      * @return 结果
      */
-    private String buildWriteLine(final T t, final List<FieldBean> fieldBeans) {
+    private String buildWriteLine(final SingleWriteContext context,
+                                  final Object t, final List<FieldBean> fieldBeans) {
         if (ObjectUtil.isNull(t)) {
             return StringUtil.EMPTY;
         }
 
         List<String> stringList = Guavas.newArrayList(fieldBeans.size());
+        // 默认使用通用转换
         IWriteConverter converter = Instances.singletion(CommonWriteConverter.class);
         try {
             for (FieldBean bean : fieldBeans) {
@@ -75,13 +78,21 @@ public class EntryWriteConverter<T> implements IWriteConverter<SingleWriteContex
                     converter = csvOptional.get().writeConverter().newInstance();
                 }
                 final Object object = bean.field().get(t);
-                String string = converter.convert(object);
+                // 上下文的处理
+                SingleWriteContext entryContext = new SingleWriteContext();
+                entryContext.value(object).field(bean.field()).element(t)
+                    .sort(context.sort());
+                String string = converter.convert(entryContext);
                 stringList.add(string);
             }
         } catch (InstantiationException | IllegalAccessException e) {
             throw new CommonRuntimeException(e);
         }
 
+        //TODO: 外籍指定分隔符号。
+        // 默认：comma
+        // 一级别明细：:
+        // 二级明细：::
         return CollectionUtil.join(stringList, PunctuationConst.COMMA);
     }
 

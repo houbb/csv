@@ -23,8 +23,8 @@ public class DefaultReadContext<T> implements IReadContext<T> {
 
     private int endIndex;
 
-    public DefaultReadContext newInstance() {
-        return new DefaultReadContext();
+    public DefaultReadContext<T> newInstance() {
+        return new DefaultReadContext<>();
     }
 
     @Override
@@ -32,7 +32,7 @@ public class DefaultReadContext<T> implements IReadContext<T> {
         return charset;
     }
 
-    public DefaultReadContext charset(String charset) {
+    public DefaultReadContext<T> charset(String charset) {
         this.charset = charset;
         return this;
     }

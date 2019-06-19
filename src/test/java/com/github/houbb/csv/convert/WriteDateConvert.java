@@ -1,6 +1,7 @@
 package com.github.houbb.csv.convert;
 
 import com.github.houbb.csv.api.IWriteConverter;
+import com.github.houbb.csv.support.context.SingleWriteContext;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -11,10 +12,11 @@ import java.util.Date;
  * @author binbin.hou
  * @since 0.0.2
  */
-public class WriteDateConvert implements IWriteConverter<Date> {
+public class WriteDateConvert implements IWriteConverter {
 
     @Override
-    public String convert(Date value) {
+    public String convert(SingleWriteContext context) {
+        final Date value = (Date)context.value();
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
         return dateFormat.format(value);
     }
