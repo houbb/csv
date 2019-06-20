@@ -168,6 +168,13 @@ public class DefaultCsv<T> implements ICsv<T> {
         List<T> list = Guavas.newArrayList(readableLines.size());
         final Class<T> readClass = context.readClass();
         final EntryReadConverter<T> readConverter = new EntryReadConverter<>();
+
+        // 单行的上下文，使用同一个对象，节约内存及堆开销
+        SingleReadContext singleReadContext = new SingleReadContext();
+        singleReadContext
+                .classType(readClass)
+                .sort(context.sort())
+                .split(CsvConst.COMMA);
         for (String line : readableLines) {
             // 跳过空白行
             if (StringUtil.isEmpty(line)) {
@@ -175,11 +182,7 @@ public class DefaultCsv<T> implements ICsv<T> {
             }
 
             // 设置对象内容
-            SingleReadContext<T> singleReadContext = new SingleReadContext<>();
-            singleReadContext.classType(readClass);
-            singleReadContext.sort(context.sort());
             singleReadContext.value(line);
-
             T instance = readConverter.convert(singleReadContext);
             list.add(instance);
         }

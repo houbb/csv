@@ -15,6 +15,6 @@ public interface IReadConverter<T> {
      * @param context 上下文
      * @return 结果
      */
-    T convert(final SingleReadContext<T> context);
+    T convert(final SingleReadContext context);
 
 }

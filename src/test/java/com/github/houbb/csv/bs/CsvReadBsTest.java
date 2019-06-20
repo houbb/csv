@@ -3,6 +3,7 @@ package com.github.houbb.csv.bs;
 import com.github.houbb.csv.model.User;
 import com.github.houbb.csv.model.UserAnnotation;
 import com.github.houbb.csv.model.UserCollection;
+import com.github.houbb.csv.model.UserEntry;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -48,7 +49,19 @@ public class CsvReadBsTest {
         List<UserCollection> userList = CsvReadBs.newInstance(path)
                 .read(UserCollection.class);
         final String result = "[UserCollection{arrays=[a, b], lists=[a, b, c], maps={key=value, key2=value2}, sets=[set2, set1]}]";
-        System.out.println(result);
+        System.out.println(userList);
+    }
+
+    /**
+     * 对象明细特性
+     * @since 0.0.5
+     */
+    @Test
+    public void entryTest() {
+        final String path = "src\\test\\resources\\entry.csv";
+        List<UserEntry> userList = CsvReadBs.newInstance(path)
+                .read(UserEntry.class);
+        System.out.println(userList);
     }
 
 }

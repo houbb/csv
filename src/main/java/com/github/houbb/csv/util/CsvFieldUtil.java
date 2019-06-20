@@ -1,12 +1,15 @@
 package com.github.houbb.csv.util;
 
 import com.github.houbb.csv.annotation.Csv;
+import com.github.houbb.csv.annotation.CsvEntry;
 import com.github.houbb.csv.constant.CsvOperateType;
 import com.github.houbb.heaven.constant.PunctuationConst;
 import com.github.houbb.heaven.reflect.model.FieldBean;
 import com.github.houbb.heaven.support.sort.ISort;
 import com.github.houbb.heaven.util.guava.Guavas;
+import com.github.houbb.heaven.util.lang.reflect.ClassTypeUtil;
 import com.github.houbb.heaven.util.lang.reflect.ClassUtil;
+import com.github.houbb.heaven.util.lang.reflect.ReflectFieldUtil;
 import com.github.houbb.heaven.util.util.CollectionUtil;
 import com.github.houbb.heaven.util.util.MapUtil;
 
@@ -113,6 +116,17 @@ public final class CsvFieldUtil {
                 CsvOperateType.READ);
 
         return MapUtil.toIndexMap(sortedFields);
+    }
+
+    /**
+     * 是否进行明细相关处理
+     * @param field 字段信息
+     * @return 是否
+     * @since 0.0.5
+     */
+    public static boolean isEntryAble(final Field field) {
+        return ReflectFieldUtil.isAnnotationPresent(field, CsvEntry.class)
+                && ClassTypeUtil.isJavaBean(field.getType());
     }
 
 }

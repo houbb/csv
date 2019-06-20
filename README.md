@@ -1,6 +1,6 @@
 # csv
 
-基于 java 注解生成加签验签 csv。
+基于 java 注解的 csv 读写框架。
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.houbb/csv/badge.svg)](http://mvnrepository.com/artifact/com.github.houbb/csv)
 [![Build Status](https://www.travis-ci.org/houbb/csv.svg?branch=master)](https://www.travis-ci.org/houbb/csv?branch=master)
@@ -34,6 +34,8 @@
 
 - 内置支持集合、数组、Map 的存取
 
+- 支持对象中内嵌其他对象
+
 # 快速开始
 
 ## 环境
@@ -48,7 +50,7 @@ maven 3.x
 <dependency>
     <groupId>com.github.houbb</groupId>
     <artifactId>csv</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.5</version>
 </dependency>
 ```
 
@@ -150,3 +152,5 @@ public void commonTest() {
 [02-CSV 字段注解的使用](doc/user/02-csv-注解使用.md)
 
 [03-CSV 集合相关支持](doc/user/03-csv-支持集合类.md)
+
+[04-CSV 内嵌对象使用](doc/user/04-csv-支持内嵌对象.md)

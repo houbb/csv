@@ -6,7 +6,6 @@ import com.github.houbb.csv.support.context.SingleReadContext;
 import com.github.houbb.csv.support.convert.read.CommonReadConverter;
 import com.github.houbb.csv.util.CsvFieldUtil;
 import com.github.houbb.heaven.annotation.ThreadSafe;
-import com.github.houbb.heaven.constant.PunctuationConst;
 import com.github.houbb.heaven.reflect.model.FieldBean;
 import com.github.houbb.heaven.response.exception.CommonRuntimeException;
 import com.github.houbb.heaven.support.instance.impl.InstanceFactory;
@@ -29,18 +28,18 @@ import java.util.Map;
 public class EntryReadConverter<T> implements IReadConverter<T> {
 
     @Override
-    public T convert(SingleReadContext<T> context) {
+    public T convert(SingleReadContext context) {
         //1. 基础信息
-        final Class<T> clazz = context.classType();
+        final Class clazz = context.classType();
         final String csvLine = context.value();
         final ISort sort = context.sort();
+        final String split = context.split();
 
         Map<Integer, FieldBean> readMapping = CsvFieldUtil.getReadMapping(clazz, sort);
 
         // 设置对象内容
-        T instance = ClassUtil.newInstance(clazz);
-
-        List<String> stringList = splitCsvLine(csvLine);
+        T instance = (T) ClassUtil.newInstance(clazz);
+        List<String> stringList = splitCsvLine(csvLine, split);
 
         // 长度判断(选择二者的最小值)
         final int minSize = getMinSize(stringList.size(), readMapping.size());
@@ -49,7 +48,7 @@ public class EntryReadConverter<T> implements IReadConverter<T> {
                 final String value = stringList.get(i);
                 final Field field = readMapping.get(i).field();
 
-                final Object object = convertReadValue(value, field);
+                final Object object = convertReadValue(value, field, split, sort);
                 field.set(instance, object);
             }
 
@@ -63,17 +62,18 @@ public class EntryReadConverter<T> implements IReadConverter<T> {
      * 分隔 csv
      *
      * @param line 原始行
+     * @param split 分隔符
      * @return 字符串列表
      */
-    private List<String> splitCsvLine(final String line) {
+    private List<String> splitCsvLine(final String line, final String split) {
         String fitLine = line;
 
         // 如果是逗号结尾，需要添加空格。避免 split 缺失问题。
-        if (fitLine.endsWith(PunctuationConst.COMMA)) {
+        if (fitLine.endsWith(split)) {
             fitLine = fitLine + StringUtil.BLANK;
         }
 
-        String[] strings = fitLine.split(PunctuationConst.COMMA);
+        String[] strings = fitLine.split(split);
         return CollectionUtil.arrayToList(strings);
     }
 
@@ -82,12 +82,14 @@ public class EntryReadConverter<T> implements IReadConverter<T> {
      *
      * @param csvContent csv 文件信息
      * @param field      字段信息
+     * @param split 分隔符
      * @return 转换后的对象
      */
-    private Object convertReadValue(final String csvContent, final Field field) {
+    private Object convertReadValue(final String csvContent, final Field field,
+                                    final String split, final ISort sort) {
         try {
             SingleReadContext context = new SingleReadContext();
-            context.value(csvContent).field(field);
+            context.value(csvContent).field(field).split(split).sort(sort);
 
             // 指定转换器的处理
             if (field.isAnnotationPresent(Csv.class)) {

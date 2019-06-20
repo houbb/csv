@@ -9,7 +9,7 @@ import java.lang.reflect.Field;
  * @author binbin.hou
  * @since 0.0.4
  */
-public class SingleReadContext<T> {
+public class SingleReadContext {
 
     /**
      * 字符串的值
@@ -29,18 +29,31 @@ public class SingleReadContext<T> {
     /**
      * 类信息
      */
-    private Class<T> classType;
+    private Class classType;
 
     /**
      * 排序信息
      */
-    private ISort<T> sort;
+    private ISort sort;
+
+    /**
+     * 分隔符号
+     * 默认使用：,
+     * 一级明细：:
+     * 二级明细：::
+     * 三级明细:  :::
+     * 依次类推。
+     *
+     * 目的：为了保证 , 号的语意性。
+     * @since 0.0.5
+     */
+    private String split;
 
     public String value() {
         return value;
     }
 
-    public SingleReadContext<T> value(String value) {
+    public SingleReadContext value(String value) {
         this.value = value;
         return this;
     }
@@ -49,7 +62,7 @@ public class SingleReadContext<T> {
         return field;
     }
 
-    public SingleReadContext<T> field(Field field) {
+    public SingleReadContext field(Field field) {
         this.field = field;
         return this;
     }
@@ -58,26 +71,35 @@ public class SingleReadContext<T> {
         return fieldType;
     }
 
-    public SingleReadContext<T> fieldType(Class fieldType) {
+    public SingleReadContext fieldType(Class fieldType) {
         this.fieldType = fieldType;
         return this;
     }
 
-    public Class<T> classType() {
+    public Class classType() {
         return classType;
     }
 
-    public SingleReadContext<T> classType(Class<T> classType) {
+    public SingleReadContext classType(Class classType) {
         this.classType = classType;
         return this;
     }
 
-    public ISort<T> sort() {
+    public ISort sort() {
         return sort;
     }
 
-    public SingleReadContext<T> sort(ISort<T> sort) {
+    public SingleReadContext sort(ISort sort) {
         this.sort = sort;
+        return this;
+    }
+
+    public String split() {
+        return split;
+    }
+
+    public SingleReadContext split(String split) {
+        this.split = split;
         return this;
     }
 }

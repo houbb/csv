@@ -38,4 +38,11 @@ public class UserEntry {
         return this;
     }
 
+    @Override
+    public String toString() {
+        return "UserEntry{" +
+                "name='" + name + '\'' +
+                ", user=" + user +
+                '}';
+    }
 }

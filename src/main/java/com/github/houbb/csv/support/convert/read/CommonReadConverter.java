@@ -2,14 +2,20 @@ package com.github.houbb.csv.support.convert.read;
 
 import com.github.houbb.csv.api.IReadConverter;
 import com.github.houbb.csv.support.context.SingleReadContext;
+import com.github.houbb.csv.support.context.SingleWriteContext;
 import com.github.houbb.csv.support.convert.read.collection.ArrayReadConverter;
 import com.github.houbb.csv.support.convert.read.collection.CollectionReadConverter;
 import com.github.houbb.csv.support.convert.read.collection.MapReadConverter;
+import com.github.houbb.csv.support.convert.read.entry.EntryReadConverter;
 import com.github.houbb.csv.support.convert.read.type.ITypeConverter;
 import com.github.houbb.csv.support.convert.read.type.impl.*;
+import com.github.houbb.csv.support.convert.write.entry.EntryWriteConverter;
+import com.github.houbb.csv.util.CsvFieldUtil;
+import com.github.houbb.csv.util.CsvInnerUtil;
 import com.github.houbb.heaven.annotation.ThreadSafe;
 import com.github.houbb.heaven.support.instance.impl.InstanceFactory;
 import com.github.houbb.heaven.support.instance.impl.Instances;
+import com.github.houbb.heaven.support.sort.ISort;
 import com.github.houbb.heaven.util.lang.ObjectUtil;
 import com.github.houbb.heaven.util.lang.StringUtil;
 import com.github.houbb.heaven.util.lang.reflect.ClassTypeUtil;
@@ -48,6 +54,8 @@ public class CommonReadConverter implements IReadConverter<Object> {
     public Object convert(final SingleReadContext context) {
         final String value = context.value();
         final Field field = context.field();
+        final String split = context.split();
+        final ISort sort = context.sort();
 
         //1. 为空判断
         if(StringUtil.isEmpty(value)) {
@@ -69,6 +77,19 @@ public class CommonReadConverter implements IReadConverter<Object> {
         // 2.3 collection
         if(ClassTypeUtil.isCollection(refType)) {
             return Instances.singletion(CollectionReadConverter.class).convert(context);
+        }
+        // 2.4 对象
+        // 当前字段指定为 @CsvEntry 且为对象
+        if(CsvFieldUtil.isEntryAble(field)) {
+            final String nextSplit = CsvInnerUtil.getNextSplit(split);
+            SingleReadContext singleReadContext = new SingleReadContext();
+            singleReadContext.sort(sort)
+                    .value(value)
+                    .split(nextSplit)
+                    .classType(refType)
+                    .field(field)
+                    ;
+            return Instances.singletion(EntryReadConverter.class).convert(singleReadContext);
         }
 
         // 3. 基本类型

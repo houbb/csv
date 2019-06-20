@@ -1,21 +1,17 @@
 package com.github.houbb.csv.support.convert.write;
 
-import com.github.houbb.csv.annotation.CsvEntry;
 import com.github.houbb.csv.api.IWriteConverter;
-import com.github.houbb.csv.constant.CsvConst;
 import com.github.houbb.csv.support.context.SingleWriteContext;
 import com.github.houbb.csv.support.convert.write.collection.ArrayWriteConverter;
 import com.github.houbb.csv.support.convert.write.collection.CollectionWriteConverter;
 import com.github.houbb.csv.support.convert.write.collection.MapWriteConverter;
 import com.github.houbb.csv.support.convert.write.entry.EntryWriteConverter;
+import com.github.houbb.csv.util.CsvFieldUtil;
+import com.github.houbb.csv.util.CsvInnerUtil;
 import com.github.houbb.heaven.support.instance.impl.Instances;
-import com.github.houbb.heaven.util.lang.CharUtil;
 import com.github.houbb.heaven.util.lang.ObjectUtil;
 import com.github.houbb.heaven.util.lang.StringUtil;
 import com.github.houbb.heaven.util.lang.reflect.ClassTypeUtil;
-import com.github.houbb.heaven.util.lang.reflect.ReflectFieldUtil;
-
-import java.lang.reflect.Field;
 
 /**
  * 通用的写入转换类
@@ -47,8 +43,8 @@ public class CommonWriteConverter implements IWriteConverter {
         }
 
         // 当前字段指定为 @CsvEntry 且为对象
-        if(isEntryAble(context)) {
-            final String split = getNextSplit(context.split());
+        if(CsvFieldUtil.isEntryAble(context.field())) {
+            final String split = CsvInnerUtil.getNextSplit(context.split());
             SingleWriteContext singleWriteContext = new SingleWriteContext();
             singleWriteContext.sort(context.sort());
             singleWriteContext.element(context.value());
@@ -57,33 +53,6 @@ public class CommonWriteConverter implements IWriteConverter {
         }
 
         return Instances.singletion(StringWriteConverter.class).convert(context);
-    }
-
-    /**
-     * 是否进行明细
-     * @param context 上下文
-     * @return 是否
-     */
-    private boolean isEntryAble(final SingleWriteContext context) {
-        final Field field = context.field();
-        return ReflectFieldUtil.isAnnotationPresent(field, CsvEntry.class)
-                && ClassTypeUtil.isJavaBean(field.getType());
-    }
-
-    /**
-     * 获取下一个分隔符号
-     * @param preSplit 原来的分隔符号
-     * @return 下一个分隔符
-     */
-    private String getNextSplit(final String preSplit) {
-        if(CsvConst.COMMA.equals(preSplit)) {
-            return CsvConst.ENTRY_SPLIT_UNIT;
-        }
-        if(preSplit.startsWith(CsvConst.ENTRY_SPLIT_UNIT)) {
-            final int times = preSplit.length()+1;
-            return CharUtil.repeat(CsvConst.ENTRY_SPLIT_UNIT_CHAR, times);
-        }
-        throw new UnsupportedOperationException("暂时不支持的分隔符!");
     }
 
 }

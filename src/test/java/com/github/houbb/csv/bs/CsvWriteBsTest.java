@@ -126,4 +126,5 @@ public class CsvWriteBsTest {
         userEntry.user(buildCommonList().get(0));
         return Collections.singletonList(userEntry);
     }
+
 }
