@@ -75,5 +75,16 @@ public class CsvReadBsTest {
         System.out.println(userList);
     }
 
+    /**
+     * 自引用测试
+     * @since 0.0.7
+     */
+    @Test
+    public void selfRefTest() {
+        final String path = "src\\test\\resources\\selfRef.csv";
+        List<UserSelfRef> userList = CsvReadBs.newInstance(path)
+                .read(UserSelfRef.class);
+        System.out.println(userList);
+    }
 
 }

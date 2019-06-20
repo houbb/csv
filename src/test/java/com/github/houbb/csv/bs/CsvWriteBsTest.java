@@ -66,6 +66,32 @@ public class CsvWriteBsTest {
     }
 
     /**
+     * 自引用测试
+     * @since 0.0.7
+     */
+    @Test
+    public void selfRefTest() {
+        final String path = "src\\test\\resources\\selfRef.csv";
+        CsvWriteBs.newInstance(path)
+                .write(buildUserSelfRefs());
+    }
+
+    /**
+     * 构建自引用列表
+     * @return 列表
+     * @since 0.0.7
+     */
+    private List<UserSelfRef> buildUserSelfRefs() {
+        UserSelfRef userSelfRef = new UserSelfRef();
+        UserSelfRef child = new UserSelfRef();
+        child.name("child");
+
+        userSelfRef.name("123");
+        userSelfRef.selfRef(child);
+        return Collections.singletonList(userSelfRef);
+    }
+
+    /**
      * 构建待转换的结果表
      * @return 结果列表
      * @since 0.0.6
