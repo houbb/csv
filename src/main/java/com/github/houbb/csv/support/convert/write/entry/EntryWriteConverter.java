@@ -2,6 +2,7 @@ package com.github.houbb.csv.support.convert.write.entry;
 
 import com.github.houbb.csv.annotation.Csv;
 import com.github.houbb.csv.api.IWriteConverter;
+import com.github.houbb.csv.constant.CsvConst;
 import com.github.houbb.csv.constant.CsvOperateType;
 import com.github.houbb.csv.support.context.SingleWriteContext;
 import com.github.houbb.csv.support.convert.write.CommonWriteConverter;
@@ -81,7 +82,8 @@ public class EntryWriteConverter implements IWriteConverter {
                 // 上下文的处理
                 SingleWriteContext entryContext = new SingleWriteContext();
                 entryContext.value(object).field(bean.field()).element(t)
-                    .sort(context.sort());
+                    .sort(context.sort())
+                    .split(CsvConst.COMMA);
                 String string = converter.convert(entryContext);
                 stringList.add(string);
             }
@@ -89,11 +91,7 @@ public class EntryWriteConverter implements IWriteConverter {
             throw new CommonRuntimeException(e);
         }
 
-        //TODO: 外籍指定分隔符号。
-        // 默认：comma
-        // 一级别明细：:
-        // 二级明细：::
-        return CollectionUtil.join(stringList, PunctuationConst.COMMA);
+        return CollectionUtil.join(stringList, context.split());
     }
 
 }

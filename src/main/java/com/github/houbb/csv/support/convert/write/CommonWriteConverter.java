@@ -2,12 +2,14 @@ package com.github.houbb.csv.support.convert.write;
 
 import com.github.houbb.csv.annotation.CsvEntry;
 import com.github.houbb.csv.api.IWriteConverter;
+import com.github.houbb.csv.constant.CsvConst;
 import com.github.houbb.csv.support.context.SingleWriteContext;
 import com.github.houbb.csv.support.convert.write.collection.ArrayWriteConverter;
 import com.github.houbb.csv.support.convert.write.collection.CollectionWriteConverter;
 import com.github.houbb.csv.support.convert.write.collection.MapWriteConverter;
 import com.github.houbb.csv.support.convert.write.entry.EntryWriteConverter;
 import com.github.houbb.heaven.support.instance.impl.Instances;
+import com.github.houbb.heaven.util.lang.CharUtil;
 import com.github.houbb.heaven.util.lang.ObjectUtil;
 import com.github.houbb.heaven.util.lang.StringUtil;
 import com.github.houbb.heaven.util.lang.reflect.ClassTypeUtil;
@@ -45,11 +47,12 @@ public class CommonWriteConverter implements IWriteConverter {
         }
 
         // 当前字段指定为 @CsvEntry 且为对象
-        // TODO: 直接存储缺少分隔标识，是否应该添加配置，可以添加 {} 前后缀。便于读取。
         if(isEntryAble(context)) {
+            final String split = getNextSplit(context.split());
             SingleWriteContext singleWriteContext = new SingleWriteContext();
             singleWriteContext.sort(context.sort());
             singleWriteContext.element(context.value());
+            singleWriteContext.split(split);
             return Instances.singletion(EntryWriteConverter.class).convert(singleWriteContext);
         }
 
@@ -65,6 +68,22 @@ public class CommonWriteConverter implements IWriteConverter {
         final Field field = context.field();
         return ReflectFieldUtil.isAnnotationPresent(field, CsvEntry.class)
                 && ClassTypeUtil.isJavaBean(field.getType());
+    }
+
+    /**
+     * 获取下一个分隔符号
+     * @param preSplit 原来的分隔符号
+     * @return 下一个分隔符
+     */
+    private String getNextSplit(final String preSplit) {
+        if(CsvConst.COMMA.equals(preSplit)) {
+            return CsvConst.ENTRY_SPLIT_UNIT;
+        }
+        if(preSplit.startsWith(CsvConst.ENTRY_SPLIT_UNIT)) {
+            final int times = preSplit.length()+1;
+            return CharUtil.repeat(CsvConst.ENTRY_SPLIT_UNIT_CHAR, times);
+        }
+        throw new UnsupportedOperationException("暂时不支持的分隔符!");
     }
 
 }

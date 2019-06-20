@@ -49,4 +49,16 @@ public final class CsvConst {
      */
     public static final String SPLIT_OR = "\\|";
 
+    /**
+     * 明细分割单元-char
+     * @since 0.0.5
+     */
+    public static final char ENTRY_SPLIT_UNIT_CHAR = ':';
+
+    /**
+     * 明细分割单元-char
+     * @since 0.0.5
+     */
+    public static final String ENTRY_SPLIT_UNIT = ":";
+
 }

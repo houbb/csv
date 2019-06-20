@@ -4,6 +4,7 @@ import com.github.houbb.csv.annotation.Csv;
 import com.github.houbb.csv.api.ICsv;
 import com.github.houbb.csv.api.IReadContext;
 import com.github.houbb.csv.api.IWriteContext;
+import com.github.houbb.csv.constant.CsvConst;
 import com.github.houbb.csv.constant.CsvOperateType;
 import com.github.houbb.csv.support.context.SingleReadContext;
 import com.github.houbb.csv.support.context.SingleWriteContext;
@@ -104,6 +105,8 @@ public class DefaultCsv<T> implements ICsv<T> {
             singleWriteContext.sort(context.sort());
             for (T t : writeList) {
                 singleWriteContext.element(t);
+                // 默认使用逗号分隔
+                singleWriteContext.split(CsvConst.COMMA);
                 final String writeLine = entryWriteConverter.convert(singleWriteContext);
                 if (StringUtil.isEmpty(writeLine)) {
                     continue;
