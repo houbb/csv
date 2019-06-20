@@ -32,9 +32,11 @@
 
 - 解决 Excel 直接打开，utf-8 乱码问题
 
-- 内置支持集合、数组、Map 的存取
+- 支持集合、数组、Map 的存取
 
 - 支持对象中内嵌其他对象
+
+- 支持特殊字符转义
 
 # 快速开始
 
@@ -50,7 +52,7 @@ maven 3.x
 <dependency>
     <groupId>com.github.houbb</groupId>
     <artifactId>csv</artifactId>
-    <version>0.0.5</version>
+    <version>0.0.6</version>
 </dependency>
 ```
 
@@ -154,3 +156,5 @@ public void commonTest() {
 [03-CSV 集合相关支持](doc/user/03-csv-支持集合类.md)
 
 [04-CSV 内嵌对象使用](doc/user/04-csv-支持内嵌对象.md)
+
+[05-CSV 内嵌对象使用](doc/user/05-csv-特殊字符转义.md)

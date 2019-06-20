@@ -1,6 +1,5 @@
 package com.github.houbb.csv.model;
 
-import com.github.houbb.csv.annotation.Csv;
 import com.github.houbb.csv.annotation.CsvEntry;
 
 import java.util.List;
@@ -20,19 +19,16 @@ public class UserEscape {
 
     /**
      * 使用 map =
-     * 没有转义
      */
     private Map<String, String> map;
 
     /**
      * 使用 |
-     * [] 转义错误
      */
     private List<String> nameList;
 
     /**
      * 使用 :
-     * 没有转义！
      */
     @CsvEntry
     private User user;
