@@ -101,12 +101,13 @@ public class DefaultCsv<T> implements ICsv<T> {
 
             // 1.3 构建每一行的内容
             EntryWriteConverter entryWriteConverter = new EntryWriteConverter();
-            SingleWriteContext singleWriteContext = new SingleWriteContext();
-            singleWriteContext.sort(context.sort());
+            SingleWriteContext singleWriteContext = SingleWriteContext.newInstance()
+                    .sort(context.sort())
+                    .escape(context.escape())
+                    .split(CsvConst.COMMA);
             for (T t : writeList) {
                 singleWriteContext.element(t);
-                // 默认使用逗号分隔
-                singleWriteContext.split(CsvConst.COMMA);
+
                 final String writeLine = entryWriteConverter.convert(singleWriteContext);
                 if (StringUtil.isEmpty(writeLine)) {
                     continue;

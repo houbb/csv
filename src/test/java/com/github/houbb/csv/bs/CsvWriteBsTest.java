@@ -1,9 +1,6 @@
 package com.github.houbb.csv.bs;
 
-import com.github.houbb.csv.model.User;
-import com.github.houbb.csv.model.UserAnnotation;
-import com.github.houbb.csv.model.UserCollection;
-import com.github.houbb.csv.model.UserEntry;
+import com.github.houbb.csv.model.*;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -58,6 +55,39 @@ public class CsvWriteBsTest {
         final String path = "src\\test\\resources\\entry.csv";
         CsvWriteBs.newInstance(path)
                 .write(buildEntryList());
+    }
+
+    /**
+     * 构建特殊信息转义信息测试
+     * @since 0.0.6
+     */
+    @Test
+    @Ignore
+    public void escapeTest() {
+        final String path = "src\\test\\resources\\escape.csv";
+        CsvWriteBs.newInstance(path)
+                .escape(true)
+                .write(buildUserEscapeList());
+    }
+
+    /**
+     * 构建待转换的结果表
+     * @return 结果列表
+     * @since 0.0.6
+     */
+    private List<UserEscape> buildUserEscapeList() {
+        UserEscape escape = new UserEscape();
+        Map<String, String> map = new HashMap<>();
+        map.put("key=key", "value=value");
+        User user = new User();
+        user.name("entry:name");
+
+        escape.name("one,one");
+        escape.nameList(Arrays.asList("one|one", "two|two"));
+        escape.map(map);
+        escape.user(user);
+
+        return Collections.singletonList(escape);
     }
 
     /**

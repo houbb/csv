@@ -7,8 +7,8 @@ import com.github.houbb.csv.constant.CsvOperateType;
 import com.github.houbb.csv.support.context.SingleWriteContext;
 import com.github.houbb.csv.support.convert.write.CommonWriteConverter;
 import com.github.houbb.csv.util.CsvFieldUtil;
+import com.github.houbb.csv.util.CsvInnerUtil;
 import com.github.houbb.heaven.annotation.ThreadSafe;
-import com.github.houbb.heaven.constant.PunctuationConst;
 import com.github.houbb.heaven.reflect.model.FieldBean;
 import com.github.houbb.heaven.response.exception.CommonRuntimeException;
 import com.github.houbb.heaven.support.instance.impl.Instances;
@@ -80,10 +80,13 @@ public class EntryWriteConverter implements IWriteConverter {
                 }
                 final Object object = bean.field().get(t);
                 // 上下文的处理
-                SingleWriteContext entryContext = new SingleWriteContext();
-                entryContext.value(object).field(bean.field()).element(t)
-                    .sort(context.sort())
-                    .split(CsvConst.COMMA);
+                SingleWriteContext entryContext = SingleWriteContext.newInstance()
+                        .value(object)
+                        .field(bean.field())
+                        .element(t)
+                        .sort(context.sort())
+                        .split(CsvConst.COMMA)
+                        .escape(context.escape());
                 String string = converter.convert(entryContext);
                 stringList.add(string);
             }

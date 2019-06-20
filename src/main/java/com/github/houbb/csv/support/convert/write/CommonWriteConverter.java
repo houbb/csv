@@ -25,7 +25,7 @@ public class CommonWriteConverter implements IWriteConverter {
 
     @Override
     public String convert(SingleWriteContext context) {
-        final Object value = context.element();
+        final Object value = context.value();
         if(ObjectUtil.isNull(value)) {
             return StringUtil.EMPTY;
         }
@@ -45,10 +45,11 @@ public class CommonWriteConverter implements IWriteConverter {
         // 当前字段指定为 @CsvEntry 且为对象
         if(CsvFieldUtil.isEntryAble(context.field())) {
             final String split = CsvInnerUtil.getNextSplit(context.split());
-            SingleWriteContext singleWriteContext = new SingleWriteContext();
-            singleWriteContext.sort(context.sort());
-            singleWriteContext.element(context.value());
-            singleWriteContext.split(split);
+            SingleWriteContext singleWriteContext = SingleWriteContext.newInstance()
+                    .sort(context.sort())
+                    .element(context.value())
+                    .split(split)
+                    .escape(context.escape());
             return Instances.singletion(EntryWriteConverter.class).convert(singleWriteContext);
         }
 

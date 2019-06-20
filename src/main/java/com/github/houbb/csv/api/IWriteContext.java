@@ -48,4 +48,11 @@ public interface IWriteContext<T> {
      */
     List<T> list();
 
+    /**
+     * 是否进行特殊字符转移
+     * @return 是否
+     * @since 0.1.16
+     */
+    boolean escape();
+
 }

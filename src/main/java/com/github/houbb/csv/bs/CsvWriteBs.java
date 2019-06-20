@@ -41,6 +41,12 @@ public class CsvWriteBs {
     private String path;
 
     /**
+     * 特殊字符转换
+     * @see com.github.houbb.csv.constant.CsvEscapeConst 特殊信息
+     */
+    private boolean escape = false;
+
+    /**
      * 私有化构造器
      */
     private CsvWriteBs(){}
@@ -76,6 +82,11 @@ public class CsvWriteBs {
         return this;
     }
 
+    public CsvWriteBs escape(boolean escape) {
+        this.escape = escape;
+        return this;
+    }
+
     /**
      * 将指定列表的内容写入到文件中
      * @param list 列表
@@ -88,7 +99,9 @@ public class CsvWriteBs {
                 .writeHead(writeHead)
                 .writeBom(writeBom)
                 .path(path)
-                .sort(sort);
+                .sort(sort)
+                .escape(escape)
+                ;
 
         ICsv<T> csv = new DefaultCsv<>();
         csv.write(context);

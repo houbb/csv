@@ -47,7 +47,7 @@ public class MapReadConverter implements IReadConverter<Map> {
                 continue;
             }
 
-            String[] kvs = entryStr.split("=");
+            String[] kvs = entryStr.split(CsvConst.EQUALS);
             if(ArrayUtil.isEmpty(kvs)) {
                 continue;
             }

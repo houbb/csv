@@ -25,6 +25,12 @@ public class DefaultWriteContext<T> implements IWriteContext<T> {
 
     private List<T> list;
 
+    /**
+     * 是否启动转换
+     * @since 0.0.6
+     */
+    private boolean escape;
+
     @Override
     public boolean writeBom() {
         return writeBom;
@@ -82,6 +88,16 @@ public class DefaultWriteContext<T> implements IWriteContext<T> {
 
     public DefaultWriteContext<T> list(List<T> list) {
         this.list = list;
+        return this;
+    }
+
+    @Override
+    public boolean escape() {
+        return escape;
+    }
+
+    public DefaultWriteContext<T> escape(boolean escape) {
+        this.escape = escape;
         return this;
     }
 }

@@ -14,6 +14,15 @@ import java.lang.reflect.Field;
 public class SingleWriteContext {
 
     /**
+     * 创建一个全新的实例
+     * @return 实例
+     * @since 0.0.6
+     */
+    public static SingleWriteContext newInstance() {
+        return new SingleWriteContext();
+    }
+
+    /**
      * 排序
      */
     private ISort sort;
@@ -47,6 +56,12 @@ public class SingleWriteContext {
      * @since 0.0.5
      */
     private String split;
+
+    /**
+     * 特殊字符转义
+     * @since 0.0.6
+     */
+    private boolean escape;
 
     public ISort sort() {
         return sort;
@@ -90,6 +105,15 @@ public class SingleWriteContext {
 
     public SingleWriteContext split(String split) {
         this.split = split;
+        return this;
+    }
+
+    public boolean escape() {
+        return escape;
+    }
+
+    public SingleWriteContext escape(boolean escape) {
+        this.escape = escape;
         return this;
     }
 }
