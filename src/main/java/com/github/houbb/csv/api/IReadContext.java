@@ -47,4 +47,11 @@ public interface IReadContext<T> {
      */
     int endIndex();
 
+    /**
+     * 是否进行特殊字符转义
+     * @since 0.0.6
+     * @return 是否
+     */
+    boolean escape();
+
 }

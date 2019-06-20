@@ -23,6 +23,8 @@ public class DefaultReadContext<T> implements IReadContext<T> {
 
     private int endIndex;
 
+    private boolean escape;
+
     public DefaultReadContext<T> newInstance() {
         return new DefaultReadContext<>();
     }
@@ -84,6 +86,16 @@ public class DefaultReadContext<T> implements IReadContext<T> {
 
     public DefaultReadContext<T> endIndex(int endIndex) {
         this.endIndex = endIndex;
+        return this;
+    }
+
+    @Override
+    public boolean escape() {
+        return escape;
+    }
+
+    public DefaultReadContext<T> escape(boolean escape) {
+        this.escape = escape;
         return this;
     }
 }

@@ -31,7 +31,7 @@ public class ArrayReadConverter implements IReadConverter<Object> {
 
         final CommonReadConverter readConverter = Instances.singletion(CommonReadConverter.class);
         for (int i = 0; i < strings.length; i++) {
-            final Object entryValue = readConverter.convert(strings[i], componentType);
+            final Object entryValue = readConverter.convert(strings[i], componentType, context.escape());
             Array.set(arrays, i, entryValue);
         }
         return arrays;

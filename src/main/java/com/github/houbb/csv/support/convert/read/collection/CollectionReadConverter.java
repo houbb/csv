@@ -32,7 +32,7 @@ public class CollectionReadConverter implements IReadConverter<Collection> {
 
         final CommonReadConverter readConverter = Instances.singletion(CommonReadConverter.class);
         for(String string : entrys) {
-            final Object object = readConverter.convert(string, componentType);
+            final Object object = readConverter.convert(string, componentType, context.escape());
             collection.add(object);
         }
         return collection;

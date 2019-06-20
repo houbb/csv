@@ -5,7 +5,6 @@ import com.github.houbb.csv.constant.CsvEscapeConst;
 import com.github.houbb.heaven.constant.PunctuationConst;
 import com.github.houbb.heaven.util.lang.CharUtil;
 import com.github.houbb.heaven.util.lang.StringUtil;
-import com.github.houbb.heaven.util.util.MapUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -76,7 +75,7 @@ public final class CsvInnerUtil {
         for (Map.Entry<String, String> entry : ESCAPE_SPECIAL_MAP.entrySet()) {
             final String key = entry.getKey();
             final String value = entry.getValue();
-            result = escape.replaceAll(key, value);
+            result = result.replaceAll(key, value);
         }
         return result;
     }

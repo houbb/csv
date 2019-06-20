@@ -43,6 +43,12 @@ public class CsvReadBs {
     private String path;
 
     /**
+     * 执行转意
+     * @since 0.0.6
+     */
+    private boolean escape = false;
+
+    /**
      * 私有化构造器
      */
     private CsvReadBs(){}
@@ -78,6 +84,11 @@ public class CsvReadBs {
         return this;
     }
 
+    public CsvReadBs escape(boolean escape) {
+        this.escape = escape;
+        return this;
+    }
+
     /**
      * 将指定文件的内容读取到列表中
      * @param tClass 类型
@@ -91,7 +102,9 @@ public class CsvReadBs {
                 .startIndex(startIndex)
                 .endIndex(endIndex)
                 .sort(sort)
-                .readClass(tClass);
+                .readClass(tClass)
+                .escape(escape)
+                ;
 
         final ICsv<T> csv = new DefaultCsv<>();
         return csv.read(context);

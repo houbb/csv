@@ -48,7 +48,7 @@ public class EntryReadConverter<T> implements IReadConverter<T> {
                 final String value = stringList.get(i);
                 final Field field = readMapping.get(i).field();
 
-                final Object object = convertReadValue(value, field, split, sort);
+                final Object object = convertReadValue(value, field, context);
                 field.set(instance, object);
             }
 
@@ -82,14 +82,18 @@ public class EntryReadConverter<T> implements IReadConverter<T> {
      *
      * @param csvContent csv 文件信息
      * @param field      字段信息
-     * @param split 分隔符
+     * @param oldContext 原始的上下文，避免过多的参数传入
      * @return 转换后的对象
      */
     private Object convertReadValue(final String csvContent, final Field field,
-                                    final String split, final ISort sort) {
+                                    final SingleReadContext oldContext) {
         try {
-            SingleReadContext context = new SingleReadContext();
-            context.value(csvContent).field(field).split(split).sort(sort);
+            SingleReadContext context = SingleReadContext.newInstance()
+                    .value(csvContent)
+                    .field(field)
+                    .split(oldContext.split())
+                    .sort(oldContext.sort())
+                    .escape(oldContext.escape());
 
             // 指定转换器的处理
             if (field.isAnnotationPresent(Csv.class)) {

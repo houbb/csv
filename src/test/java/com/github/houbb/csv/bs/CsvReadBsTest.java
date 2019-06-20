@@ -1,9 +1,6 @@
 package com.github.houbb.csv.bs;
 
-import com.github.houbb.csv.model.User;
-import com.github.houbb.csv.model.UserAnnotation;
-import com.github.houbb.csv.model.UserCollection;
-import com.github.houbb.csv.model.UserEntry;
+import com.github.houbb.csv.model.*;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -34,9 +31,7 @@ public class CsvReadBsTest {
         final String path = "src\\test\\resources\\annotation.csv";
         List<UserAnnotation> userList = CsvReadBs.newInstance(path)
                 .read(UserAnnotation.class);
-
-        final String result = "[UserAnnotation{name='你好', password='null', birthday=Tue Jun 18 00:00:00 CST 2019}]";
-        Assert.assertEquals(result, userList.toString());
+        Assert.assertEquals("你好", userList.get(0).name());
     }
 
     /**
@@ -61,7 +56,24 @@ public class CsvReadBsTest {
         final String path = "src\\test\\resources\\entry.csv";
         List<UserEntry> userList = CsvReadBs.newInstance(path)
                 .read(UserEntry.class);
+        final String string = "[UserEntry{name='test', user=User{name='你好', age=10, score=60.0, money=200.0, sex=true, level=4, id=1, status=Y, coin=1}}]";
+        Assert.assertEquals(string, userList.toString());
+    }
+
+    /**
+     * 特殊字符转义
+     * @since 0.0.6
+     */
+    @Test
+    public void escapeTest() {
+        final String path = "src\\test\\resources\\escape.csv";
+        List<UserEscape> userList = CsvReadBs.newInstance(path)
+                .escape(true)
+                .read(UserEscape.class);
+        final String string = "[UserEscape{name='one,one', nameList=[one|one, two|two], user=User{name='entry:name', age=0, score=0.0, money=0.0, sex=false, level=0, id=0, status=, coin=0}, map={key=key=value=value}}]";
+        Assert.assertEquals("one,one", userList.get(0).name());
         System.out.println(userList);
     }
+
 
 }

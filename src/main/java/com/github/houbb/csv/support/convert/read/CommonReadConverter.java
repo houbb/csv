@@ -86,21 +86,25 @@ public class CommonReadConverter implements IReadConverter<Object> {
                     .split(nextSplit)
                     .classType(refType)
                     .field(field)
+                    .escape(context.escape())
                     ;
             return Instances.singletion(EntryReadConverter.class).convert(singleReadContext);
         }
 
         // 3. 基本类型
-        return this.convert(value, refType);
+        final boolean escape = context.escape();
+        return this.convert(value, refType, escape);
     }
 
     /**
      * 根据类型进行转换
      * @param value 字符串的值
      * @param type 字段的类型
+     * @param escape 是否进行特殊字符转义 since 0.0.6
      * @return 转换的结果
      */
-    public Object convert(String value, final Class type) {
+    public Object convert(String value, final Class type,
+                          final boolean escape) {
         //1. 快速返回
         if(StringUtil.isEmpty(value)
             || ObjectUtil.isNull(type)) {
@@ -114,6 +118,9 @@ public class CommonReadConverter implements IReadConverter<Object> {
         }
         ITypeConverter readConverter = CONVERTER_MAP.get(actualType);
         if(ObjectUtil.isNotNull(readConverter)) {
+            if(escape) {
+                value = CsvInnerUtil.replaceAllEscape(value);
+            }
             return readConverter.convert(value, actualType);
         }
 

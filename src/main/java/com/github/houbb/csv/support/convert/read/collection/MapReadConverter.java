@@ -52,8 +52,8 @@ public class MapReadConverter implements IReadConverter<Map> {
                 continue;
             }
 
-            Object keyObj = readConverter.convert(kvs[0], keyType);
-            Object valueObj = readConverter.convert(kvs[1], valueType);
+            Object keyObj = readConverter.convert(kvs[0], keyType, context.escape());
+            Object valueObj = readConverter.convert(kvs[1], valueType, context.escape());
             map.put(keyObj, valueObj);
         }
 

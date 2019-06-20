@@ -175,7 +175,8 @@ public class DefaultCsv<T> implements ICsv<T> {
         singleReadContext
                 .classType(readClass)
                 .sort(context.sort())
-                .split(CsvConst.COMMA);
+                .split(CsvConst.COMMA)
+                .escape(context.escape());
         for (String line : readableLines) {
             // 跳过空白行
             if (StringUtil.isEmpty(line)) {

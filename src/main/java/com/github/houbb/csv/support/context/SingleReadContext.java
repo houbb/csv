@@ -49,6 +49,21 @@ public class SingleReadContext {
      */
     private String split;
 
+    /**
+     * 特殊字符的转义
+     * @since 0.0.6
+     */
+    private boolean escape;
+
+    /**
+     * 创建新的实例
+     * @return 新的实例
+     * @since 0.0.6
+     */
+    public static SingleReadContext newInstance() {
+        return new SingleReadContext();
+    }
+
     public String value() {
         return value;
     }
@@ -100,6 +115,15 @@ public class SingleReadContext {
 
     public SingleReadContext split(String split) {
         this.split = split;
+        return this;
+    }
+
+    public boolean escape() {
+        return escape;
+    }
+
+    public SingleReadContext escape(boolean escape) {
+        this.escape = escape;
         return this;
     }
 }
