@@ -1,6 +1,6 @@
 # csv
 
-基于 java 注解的 csv 读写框架。
+[CSV](https://github.com/houbb/csv) 是基于 java 注解的 csv 读写框架，让你更加优雅方便的操作 csv。
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.houbb/csv/badge.svg)](http://mvnrepository.com/artifact/com.github.houbb/csv)
 [![Build Status](https://www.travis-ci.org/houbb/csv.svg?branch=master)](https://www.travis-ci.org/houbb/csv?branch=master)
@@ -46,6 +46,10 @@
 
 - 支持特殊字符转义
 
+### v0.0.7 变更
+
+- 修复生成序列号标识字段问题
+
 # 快速开始
 
 ## 环境
@@ -60,7 +64,7 @@ maven 3.x
 <dependency>
     <groupId>com.github.houbb</groupId>
     <artifactId>csv</artifactId>
-    <version>0.0.6</version>
+    <version>0.0.7</version>
 </dependency>
 ```
 

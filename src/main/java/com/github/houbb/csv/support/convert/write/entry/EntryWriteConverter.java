@@ -71,7 +71,7 @@ public class EntryWriteConverter implements IWriteConverter {
 
         List<String> stringList = Guavas.newArrayList(fieldBeans.size());
         // 默认使用通用转换
-        IWriteConverter converter = Instances.singletion(CommonWriteConverter.class);
+        IWriteConverter converter = Instances.singleton(CommonWriteConverter.class);
         try {
             for (FieldBean bean : fieldBeans) {
                 final Optional<Csv> csvOptional = bean.annotationOptByType(Csv.class);

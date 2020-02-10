@@ -49,9 +49,9 @@ public class MapWriteConverter implements IWriteConverter {
         for (Object key : map.keySet()) {
             final Pair<Object, Boolean> keyPair = Pair.of(key, escape);
             final Pair<Object, Boolean> valuePair = Pair.of(map.get(key), escape);
-            final String keyString = Instances.singletion(StringWriteConverter.class)
+            final String keyString = Instances.singleton(StringWriteConverter.class)
                     .handle(keyPair);
-            final String valueString = Instances.singletion(StringWriteConverter.class)
+            final String valueString = Instances.singleton(StringWriteConverter.class)
                     .handle(valuePair);
             final String string = keyString + CsvConst.EQUALS + valueString;
             stringList.add(string);

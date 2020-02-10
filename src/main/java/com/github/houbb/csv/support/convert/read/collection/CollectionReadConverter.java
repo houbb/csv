@@ -30,7 +30,7 @@ public class CollectionReadConverter implements IReadConverter<Collection> {
         Collection collection = getCollection(field.getType(), entrys.length);
         final Class componentType = ReflectFieldUtil.getComponentType(field);
 
-        final CommonReadConverter readConverter = Instances.singletion(CommonReadConverter.class);
+        final CommonReadConverter readConverter = Instances.singleton(CommonReadConverter.class);
         for(String string : entrys) {
             final Object object = readConverter.convert(string, componentType, context.escape());
             collection.add(object);

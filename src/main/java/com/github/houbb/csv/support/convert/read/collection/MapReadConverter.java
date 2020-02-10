@@ -40,7 +40,7 @@ public class MapReadConverter implements IReadConverter<Map> {
         final Class keyType = ReflectFieldUtil.getComponentType(field, 0);
         final Class valueType = ReflectFieldUtil.getComponentType(field, 1);
 
-        final CommonReadConverter readConverter = Instances.singletion(CommonReadConverter.class);
+        final CommonReadConverter readConverter = Instances.singleton(CommonReadConverter.class);
 
         for(String entryStr : entryStrings) {
             if(StringUtil.isEmpty(entryStr)) {

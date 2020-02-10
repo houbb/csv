@@ -21,6 +21,21 @@ public class CsvWriteBsTest {
     }
 
     /**
+     * @since 0.0.7
+     */
+    @Test
+    public void commonWithIdTest() {
+        final String path = "src\\test\\resources\\common_id.csv";
+
+        List<UserWithSerialId> list = new ArrayList<>();
+        UserWithSerialId user = new UserWithSerialId().name("test").age(2020);
+        list.add(user);
+
+        CsvWriteBs.newInstance(path)
+                .write(list);
+    }
+
+    /**
      * 基于注解的写入测试
      * @since 0.0.2
      */

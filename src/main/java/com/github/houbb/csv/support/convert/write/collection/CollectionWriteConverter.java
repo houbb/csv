@@ -46,7 +46,7 @@ public class CollectionWriteConverter implements IWriteConverter {
         final boolean escape = context.escape();
         for(Object object : collection) {
             final Pair<Object, Boolean> pair = Pair.of(object, escape);
-            final String string = Instances.singletion(StringWriteConverter.class)
+            final String string = Instances.singleton(StringWriteConverter.class)
                     .handle(pair);
             stringList.add(string);
         }

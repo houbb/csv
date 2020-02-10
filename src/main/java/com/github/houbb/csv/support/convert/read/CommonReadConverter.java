@@ -66,15 +66,15 @@ public class CommonReadConverter implements IReadConverter<Object> {
         //2 特殊集合的处理
         // 2.1 数组
         if(ClassTypeUtil.isArray(refType)) {
-            return Instances.singletion(ArrayReadConverter.class).convert(context);
+            return Instances.singleton(ArrayReadConverter.class).convert(context);
         }
         // 2.2 map
         if(ClassTypeUtil.isMap(refType)) {
-            return Instances.singletion(MapReadConverter.class).convert(context);
+            return Instances.singleton(MapReadConverter.class).convert(context);
         }
         // 2.3 collection
         if(ClassTypeUtil.isCollection(refType)) {
-            return Instances.singletion(CollectionReadConverter.class).convert(context);
+            return Instances.singleton(CollectionReadConverter.class).convert(context);
         }
         // 2.4 对象
         // 当前字段指定为 @CsvEntry 且为对象
@@ -88,7 +88,7 @@ public class CommonReadConverter implements IReadConverter<Object> {
                     .field(field)
                     .escape(context.escape())
                     ;
-            return Instances.singletion(EntryReadConverter.class).convert(singleReadContext);
+            return Instances.singleton(EntryReadConverter.class).convert(singleReadContext);
         }
 
         // 3. 基本类型

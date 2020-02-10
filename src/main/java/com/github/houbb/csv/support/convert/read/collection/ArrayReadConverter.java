@@ -29,7 +29,7 @@ public class ArrayReadConverter implements IReadConverter<Object> {
         Class componentType = ReflectFieldUtil.getComponentType(field);
         Object[] arrays = (Object[]) Array.newInstance(componentType, strings.length);
 
-        final CommonReadConverter readConverter = Instances.singletion(CommonReadConverter.class);
+        final CommonReadConverter readConverter = Instances.singleton(CommonReadConverter.class);
         for (int i = 0; i < strings.length; i++) {
             final Object entryValue = readConverter.convert(strings[i], componentType, context.escape());
             Array.set(arrays, i, entryValue);

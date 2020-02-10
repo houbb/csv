@@ -33,13 +33,13 @@ public class CommonWriteConverter implements IWriteConverter {
         final Class type = value.getClass();
         // 特殊的集合类型处理
         if(ClassTypeUtil.isArray(type)) {
-            return Instances.singletion(ArrayWriteConverter.class).convert(context);
+            return Instances.singleton(ArrayWriteConverter.class).convert(context);
         }
         if(ClassTypeUtil.isMap(type)) {
-            return Instances.singletion(MapWriteConverter.class).convert(context);
+            return Instances.singleton(MapWriteConverter.class).convert(context);
         }
         if(ClassTypeUtil.isCollection(type)) {
-            return Instances.singletion(CollectionWriteConverter.class).convert(context);
+            return Instances.singleton(CollectionWriteConverter.class).convert(context);
         }
 
         // 当前字段指定为 @CsvEntry 且为对象
@@ -50,10 +50,10 @@ public class CommonWriteConverter implements IWriteConverter {
                     .element(context.value())
                     .split(split)
                     .escape(context.escape());
-            return Instances.singletion(EntryWriteConverter.class).convert(singleWriteContext);
+            return Instances.singleton(EntryWriteConverter.class).convert(singleWriteContext);
         }
 
-        return Instances.singletion(StringWriteConverter.class).convert(context);
+        return Instances.singleton(StringWriteConverter.class).convert(context);
     }
 
 }
