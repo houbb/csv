@@ -1,5 +1,6 @@
 package com.github.houbb.csv.util;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -8,6 +9,7 @@ import java.util.Arrays;
  * @author binbin.hou
  * @since 0.0.1
  */
+@Ignore
 public class SplitTest {
 
     @Test

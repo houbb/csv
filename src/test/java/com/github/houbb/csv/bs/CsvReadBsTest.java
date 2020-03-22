@@ -2,6 +2,7 @@ package com.github.houbb.csv.bs;
 
 import com.github.houbb.csv.model.*;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
  * @author binbin.hou
  * @since 0.0.1
  */
+@Ignore
 public class CsvReadBsTest {
 
     @Test
