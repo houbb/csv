@@ -4,7 +4,8 @@
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.houbb/csv/badge.svg)](http://mvnrepository.com/artifact/com.github.houbb/csv)
 [![Build Status](https://www.travis-ci.org/houbb/csv.svg?branch=master)](https://www.travis-ci.org/houbb/csv?branch=master)
-[![Coverage Status](https://coveralls.io/repos/github/houbb/csv/badge.svg?branch=master)](https://coveralls.io/github/houbb/csv?branch=master)
+[![](https://img.shields.io/badge/license-Apache2-FF0080.svg)](https://github.com/houbb/csv/blob/master/LICENSE.txt)
+[![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/houbb/csv)
 
 ## 相关框架
 
