@@ -120,6 +120,7 @@ public final class CsvWriteBs {
      * 将指定列表的内容写入到文件中
      * @param list 列表
      * @param <T> 泛型
+     * @return 写入的字符串列表
      */
     @SuppressWarnings("unchecked")
     public <T> List<String> write(List<T> list) {
