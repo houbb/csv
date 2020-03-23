@@ -73,6 +73,8 @@ maven 3.x
 
 ### 写入
 
+详情参考 [CsvHelperWriterTest.java](https://github.com/houbb/csv/blob/release_0.0.8/src/test/java/com/github/houbb/csv/util/CsvHelperWriterTest.java)
+
 ```java
 final String path = "src\\test\\resources\\helper.csv";
 
@@ -87,6 +89,8 @@ name,age,score,money,sex,level,id,status,coin
 ```
 
 ### 读取
+
+详情参考 [CsvHelperReaderTest.java](https://github.com/houbb/csv/blob/release_0.0.8/src/test/java/com/github/houbb/csv/util/CsvHelperReaderTest.java)
 
 - 读取文件
 
