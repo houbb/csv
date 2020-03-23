@@ -42,4 +42,16 @@ public final class CsvConst {
      */
     public static final String ENTRY_SPLIT_UNIT = ":";
 
+    /**
+     * 默认开始下标
+     * @since 0.0.8
+     */
+    public static final int DEFAULT_START_INDEX = 1;
+
+    /**
+     * 默认结束下标
+     * @since 0.0.8
+     */
+    public static final int DEFAULT_END_INDEX = Integer.MAX_VALUE;
+
 }

@@ -1,11 +1,14 @@
 package com.github.houbb.csv.bs;
 
 import com.github.houbb.csv.api.ICsv;
+import com.github.houbb.csv.constant.CsvConst;
 import com.github.houbb.csv.support.context.DefaultReadContext;
 import com.github.houbb.csv.support.csv.DefaultCsv;
-import com.github.houbb.heaven.constant.CharsetConst;
+import com.github.houbb.csv.support.reader.ICsvReader;
+import com.github.houbb.heaven.support.instance.impl.Instances;
 import com.github.houbb.heaven.support.sort.ISort;
 import com.github.houbb.heaven.support.sort.impl.NoSort;
+import com.github.houbb.heaven.util.common.ArgUtil;
 
 import java.util.List;
 
@@ -17,30 +20,21 @@ import java.util.List;
 public class CsvReadBs {
 
     /**
-     * 指定文件编码
+     * 读取类实现
+     * @since 0.0.8
      */
-    private String charset = CharsetConst.UTF8;
+    private ICsvReader reader;
 
     /**
      * 开始下标
      * 1. 跳过第一行的 head
      */
-    private int startIndex = 1;
+    private int startIndex = CsvConst.DEFAULT_START_INDEX;
 
     /**
      * 结束下标
      */
-    private int endIndex = Integer.MAX_VALUE;
-
-    /**
-     * 指定排序方式
-     */
-    private ISort sort = new NoSort();
-
-    /**
-     * 文件路径
-     */
-    private String path;
+    private int endIndex = CsvConst.DEFAULT_END_INDEX;
 
     /**
      * 执行转意
@@ -49,41 +43,67 @@ public class CsvReadBs {
     private boolean escape = false;
 
     /**
+     * 无任何排序实现
+     * @since 0.0.8
+     */
+    @Deprecated
+    private ISort sort = Instances.singleton(NoSort.class);
+
+    /**
      * 私有化构造器
      */
     private CsvReadBs(){}
 
-    public static CsvReadBs newInstance(final String path) {
-        CsvReadBs csvBs = new CsvReadBs();
-        csvBs.path(path);
-        return csvBs;
+    /**
+     * 新建对象
+     * @return this
+     * @since 0.0.1
+     */
+    public static CsvReadBs newInstance() {
+        return new CsvReadBs();
     }
 
-    public CsvReadBs charset(String charset) {
-        this.charset = charset;
+    /**
+     * 读取类
+     * @param reader 读取类
+     * @return this
+     * @since 0.0.8
+     */
+    public CsvReadBs reader(ICsvReader reader) {
+        ArgUtil.notNull(reader, "reader");
+
+        this.reader = reader;
         return this;
     }
 
-    public CsvReadBs sort(ISort sort) {
-        this.sort = sort;
-        return this;
-    }
-
-    public CsvReadBs path(String path) {
-        this.path = path;
-        return this;
-    }
-
+    /**
+     * 设置开始下标
+     * @param startIndex 开始下标
+     * @return this
+     * @since 0.0.8
+     */
     public CsvReadBs startIndex(int startIndex) {
         this.startIndex = startIndex;
         return this;
     }
 
+    /**
+     * 设置结束下标
+     * @param endIndex 结束下标
+     * @return this
+     * @since 0.0.8
+     */
     public CsvReadBs endIndex(int endIndex) {
         this.endIndex = endIndex;
         return this;
     }
 
+    /**
+     * 设置是否进行转义
+     * @param escape 结束下标
+     * @return this
+     * @since 0.0.8
+     */
     public CsvReadBs escape(boolean escape) {
         this.escape = escape;
         return this;
@@ -97,8 +117,7 @@ public class CsvReadBs {
      */
     public <T> List<T> read(Class<T> tClass) {
         DefaultReadContext<T> context = new DefaultReadContext<>();
-        context.charset(charset)
-                .path(path)
+        context.reader(reader)
                 .startIndex(startIndex)
                 .endIndex(endIndex)
                 .sort(sort)

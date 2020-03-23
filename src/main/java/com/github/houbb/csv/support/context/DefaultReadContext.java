@@ -1,6 +1,7 @@
 package com.github.houbb.csv.support.context;
 
 import com.github.houbb.csv.api.IReadContext;
+import com.github.houbb.csv.support.reader.ICsvReader;
 import com.github.houbb.heaven.support.sort.ISort;
 
 /**
@@ -11,11 +12,13 @@ import com.github.houbb.heaven.support.sort.ISort;
  */
 public class DefaultReadContext<T> implements IReadContext<T> {
 
-    private String charset;
+    /**
+     * 读取类
+     * @since 0.0.8
+     */
+    private ICsvReader reader;
 
     private ISort<T> sort;
-
-    private String path;
 
     private Class<T> readClass;
 
@@ -30,12 +33,12 @@ public class DefaultReadContext<T> implements IReadContext<T> {
     }
 
     @Override
-    public String charset() {
-        return charset;
+    public ICsvReader reader() {
+        return reader;
     }
 
-    public DefaultReadContext<T> charset(String charset) {
-        this.charset = charset;
+    public DefaultReadContext<T> reader(ICsvReader reader) {
+        this.reader = reader;
         return this;
     }
 
@@ -46,16 +49,6 @@ public class DefaultReadContext<T> implements IReadContext<T> {
 
     public DefaultReadContext<T> sort(ISort<T> sort) {
         this.sort = sort;
-        return this;
-    }
-
-    @Override
-    public String path() {
-        return path;
-    }
-
-    public DefaultReadContext<T> path(String path) {
-        this.path = path;
         return this;
     }
 

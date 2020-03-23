@@ -1,5 +1,6 @@
 package com.github.houbb.csv.api;
 
+import com.github.houbb.csv.support.reader.ICsvReader;
 import com.github.houbb.heaven.support.sort.ISort;
 
 /**
@@ -11,22 +12,17 @@ import com.github.houbb.heaven.support.sort.ISort;
 public interface IReadContext<T> {
 
     /**
-     * 文件编码
-     * @return 文件编码
+     * 读取类
+     * @return 实现
+     * @since 0.0.8
      */
-    String charset();
+    ICsvReader reader();
 
     /**
      * 排序方式
      * @return 排序方式
      */
     ISort<T> sort();
-
-    /**
-     * 文件路径
-     * @return 文件路径
-     */
-    String path();
 
     /**
      * 读取的类型

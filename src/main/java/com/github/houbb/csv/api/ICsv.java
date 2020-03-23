@@ -13,8 +13,10 @@ public interface ICsv<T> {
     /**
      * 写入
      * @param context 上下文
+     * @return 写入的字符串列表
+     * @since 0.0.8
      */
-    void write(IWriteContext<T> context);
+    List<String> write(IWriteContext<T> context);
 
     /**
      * 读取

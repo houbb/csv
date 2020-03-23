@@ -4,6 +4,7 @@ import com.github.houbb.csv.api.ICsv;
 import com.github.houbb.csv.support.context.DefaultWriteContext;
 import com.github.houbb.csv.support.csv.DefaultCsv;
 import com.github.houbb.heaven.constant.CharsetConst;
+import com.github.houbb.heaven.support.instance.impl.Instances;
 import com.github.houbb.heaven.support.sort.ISort;
 import com.github.houbb.heaven.support.sort.impl.NoSort;
 
@@ -17,27 +18,34 @@ import java.util.List;
 public class CsvWriteBs {
     /**
      * 是否写入 head 头信息
+     * @since 0.0.1
      */
     private boolean writeHead = true;
 
     /**
      * 是否写入 bom
+     * @since 0.0.1
      */
     private boolean writeBom = true;
 
     /**
      * 指定文件编码
+     * @since 0.0.1
      */
     private String charset = CharsetConst.UTF8;
 
     /**
      * 指定排序方式
+     *
+     * @since 0.0.8 废弃
      */
-    private ISort sort = new NoSort();
+    @Deprecated
+    private ISort sort = Instances.singleton(NoSort.class);
 
     /**
      * 文件路径
      */
+    @Deprecated
     private String path;
 
     /**

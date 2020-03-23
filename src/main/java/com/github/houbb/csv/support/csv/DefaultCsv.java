@@ -12,12 +12,12 @@ import com.github.houbb.csv.support.convert.read.entry.EntryReadConverter;
 import com.github.houbb.csv.support.convert.write.entry.EntryWriteConverter;
 import com.github.houbb.csv.util.CsvBomUtil;
 import com.github.houbb.csv.util.CsvFieldUtil;
+import com.github.houbb.heaven.annotation.ThreadSafe;
 import com.github.houbb.heaven.constant.PunctuationConst;
 import com.github.houbb.heaven.reflect.model.FieldBean;
 import com.github.houbb.heaven.response.exception.CommonRuntimeException;
 import com.github.houbb.heaven.util.guava.Guavas;
 import com.github.houbb.heaven.util.lang.StringUtil;
-import com.github.houbb.heaven.util.nio.PathUtil;
 import com.github.houbb.heaven.util.util.CollectionUtil;
 import com.github.houbb.heaven.util.util.MapUtil;
 import com.github.houbb.heaven.util.util.Optional;
@@ -41,23 +41,24 @@ import java.util.Map;
  * @author binbin.hou
  * @since 0.0.1
  */
+@ThreadSafe
 public class DefaultCsv<T> implements ICsv<T> {
 
     @Override
-    public void write(IWriteContext<T> context) {
+    public List<String> write(IWriteContext<T> context) {
         final List<T> writeList = context.list();
         if (CollectionUtil.isEmpty(writeList)) {
-            return;
+            return Collections.emptyList();
         }
         final Optional<T> firstOpt = CollectionUtil.firstNotNullElem(writeList);
         if (firstOpt.isNotPresent()) {
-            return;
+            return Collections.emptyList();
         }
         final T elem = firstOpt.get();
         final List<FieldBean> fieldBeanList = CsvFieldUtil.getSortedFields(elem.getClass(),
                 context.sort(), CsvOperateType.WRITE);
         if (CollectionUtil.isEmpty(fieldBeanList)) {
-            return;
+            return Collections.emptyList();
         }
 
         try {
@@ -117,6 +118,9 @@ public class DefaultCsv<T> implements ICsv<T> {
 
             // 2.3.3 写入实际内容
             Files.write(path, list, Charset.forName(charset), StandardOpenOption.APPEND);
+
+            //3. 返回结果列表
+            return list;
         } catch (IOException e) {
             throw new CommonRuntimeException(e);
         }
@@ -159,7 +163,8 @@ public class DefaultCsv<T> implements ICsv<T> {
         }
 
         //2. 文件内容
-        List<String> readableLines = PathUtil.readAllLines(context.path(), context.charset(),
+        List<String> allLines = context.reader().read();
+        List<String> readableLines = CollectionUtil.subList(allLines,
                 context.startIndex(), context.endIndex());
         if (CollectionUtil.isEmpty(readableLines)) {
             return Collections.emptyList();
