@@ -17,7 +17,7 @@ import java.util.List;
  * @author binbin.hou
  * @since 0.0.1
  */
-public class CsvReadBs {
+public final class CsvReadBs {
 
     /**
      * 读取类实现
@@ -48,6 +48,13 @@ public class CsvReadBs {
      */
     @Deprecated
     private ISort sort = Instances.singleton(NoSort.class);
+
+    /**
+     * csv 默认实现
+     *
+     * @since 0.0.8
+     */
+    private final ICsv csv = Instances.singleton(DefaultCsv.class);
 
     /**
      * 私有化构造器
@@ -115,6 +122,7 @@ public class CsvReadBs {
      * @param <T> 泛型
      * @return 列表
      */
+    @SuppressWarnings("unchecked")
     public <T> List<T> read(Class<T> tClass) {
         DefaultReadContext<T> context = new DefaultReadContext<>();
         context.reader(reader)
@@ -125,7 +133,6 @@ public class CsvReadBs {
                 .escape(escape)
                 ;
 
-        final ICsv<T> csv = new DefaultCsv<>();
         return csv.read(context);
     }
 

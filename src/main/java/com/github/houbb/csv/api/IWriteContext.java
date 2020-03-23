@@ -1,5 +1,6 @@
 package com.github.houbb.csv.api;
 
+import com.github.houbb.csv.support.writer.ICsvWriter;
 import com.github.houbb.heaven.support.sort.ISort;
 
 import java.util.List;
@@ -13,10 +14,11 @@ import java.util.List;
 public interface IWriteContext<T> {
 
     /**
-     * 是否写入 bom
-     * @return 是否写入 bom
+     * 写入处理类
+     * @return 实现
+     * @since 0.0.8
      */
-    boolean writeBom();
+    ICsvWriter writer();
 
     /**
      * 是否写入标题头
@@ -25,22 +27,10 @@ public interface IWriteContext<T> {
     boolean writeHead();
 
     /**
-     * 文件编码
-     * @return 文件编码
-     */
-    String charset();
-
-    /**
      * 排序方式
      * @return 排序方式
      */
     ISort sort();
-
-    /**
-     * 文件路径
-     * @return 文件路径
-     */
-    String path();
 
     /**
      * 待写入的列表

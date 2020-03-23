@@ -1,6 +1,7 @@
 package com.github.houbb.csv.support.context;
 
 import com.github.houbb.csv.api.IWriteContext;
+import com.github.houbb.csv.support.writer.ICsvWriter;
 import com.github.houbb.heaven.support.sort.ISort;
 
 import java.util.List;
@@ -13,16 +14,28 @@ import java.util.List;
  */
 public class DefaultWriteContext<T> implements IWriteContext<T> {
 
-    private boolean writeBom;
+    /**
+     * 写入处理类
+     * @since 0.0.8
+     */
+    private ICsvWriter writer;
 
+    /**
+     * 是否写入表头
+     * @since 0.0.8
+     */
     private boolean writeHead;
 
-    private String charset;
-
+    /**
+     * 排序算法
+     * @since 0.0.8
+     */
     private ISort sort;
 
-    private String path;
-
+    /**
+     * 待写入列表
+     * @since 0.0.8
+     */
     private List<T> list;
 
     /**
@@ -32,12 +45,12 @@ public class DefaultWriteContext<T> implements IWriteContext<T> {
     private boolean escape;
 
     @Override
-    public boolean writeBom() {
-        return writeBom;
+    public ICsvWriter writer() {
+        return writer;
     }
 
-    public DefaultWriteContext<T> writeBom(boolean writeBom) {
-        this.writeBom = writeBom;
+    public DefaultWriteContext<T> writer(ICsvWriter writer) {
+        this.writer = writer;
         return this;
     }
 
@@ -52,32 +65,12 @@ public class DefaultWriteContext<T> implements IWriteContext<T> {
     }
 
     @Override
-    public String charset() {
-        return charset;
-    }
-
-    public DefaultWriteContext<T> charset(String charset) {
-        this.charset = charset;
-        return this;
-    }
-
-    @Override
     public ISort sort() {
         return sort;
     }
 
     public DefaultWriteContext<T> sort(ISort sort) {
         this.sort = sort;
-        return this;
-    }
-
-    @Override
-    public String path() {
-        return path;
-    }
-
-    public DefaultWriteContext<T> path(String path) {
-        this.path = path;
         return this;
     }
 

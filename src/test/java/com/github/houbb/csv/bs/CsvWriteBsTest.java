@@ -1,6 +1,7 @@
 package com.github.houbb.csv.bs;
 
 import com.github.houbb.csv.model.*;
+import com.github.houbb.csv.support.writer.impl.CsvWriters;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -16,7 +17,8 @@ public class CsvWriteBsTest {
     @Test
     public void commonTest() {
         final String path = "src\\test\\resources\\common.csv";
-        CsvWriteBs.newInstance(path)
+        CsvWriteBs.newInstance()
+                .writer(CsvWriters.filePath(path))
                 .write(buildCommonList());
     }
 
@@ -31,7 +33,8 @@ public class CsvWriteBsTest {
         UserWithSerialId user = new UserWithSerialId().name("test").age(2020);
         list.add(user);
 
-        CsvWriteBs.newInstance(path)
+        CsvWriteBs.newInstance()
+                .writer(CsvWriters.filePath(path))
                 .write(list);
     }
 
@@ -42,7 +45,8 @@ public class CsvWriteBsTest {
     @Test
     public void annotationTest() {
         final String path = "src\\test\\resources\\annotation.csv";
-        CsvWriteBs.newInstance(path)
+        CsvWriteBs.newInstance()
+                .writer(CsvWriters.filePath(path))
                 .write(buildAnnotationList());
     }
 
@@ -53,7 +57,8 @@ public class CsvWriteBsTest {
     @Test
     public void collectionTest() {
         final String path = "src\\test\\resources\\collection.csv";
-        CsvWriteBs.newInstance(path)
+        CsvWriteBs.newInstance()
+                .writer(CsvWriters.filePath(path))
                 .write(buildCollectionList());
     }
 
@@ -64,7 +69,8 @@ public class CsvWriteBsTest {
     @Test
     public void entryTest() {
         final String path = "src\\test\\resources\\entry.csv";
-        CsvWriteBs.newInstance(path)
+        CsvWriteBs.newInstance()
+                .writer(CsvWriters.filePath(path))
                 .write(buildEntryList());
     }
 
@@ -75,7 +81,8 @@ public class CsvWriteBsTest {
     @Test
     public void escapeTest() {
         final String path = "src\\test\\resources\\escape.csv";
-        CsvWriteBs.newInstance(path)
+        CsvWriteBs.newInstance()
+                .writer(CsvWriters.filePath(path))
                 .escape(true)
                 .write(buildUserEscapeList());
     }
@@ -87,7 +94,8 @@ public class CsvWriteBsTest {
     @Test
     public void selfRefTest() {
         final String path = "src\\test\\resources\\selfRef.csv";
-        CsvWriteBs.newInstance(path)
+        CsvWriteBs.newInstance()
+                .writer(CsvWriters.filePath(path))
                 .write(buildUserSelfRefs());
     }
 
