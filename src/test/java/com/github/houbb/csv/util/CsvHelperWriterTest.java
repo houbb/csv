@@ -33,8 +33,7 @@ public class CsvHelperWriterTest {
     public void writerFileTest() {
         final String path = "src\\test\\resources\\helper.csv";
 
-        List<User> userList = buildCommonList();
-        CsvHelper.write(userList, CsvWriters.filePath(path));
+        CsvHelper.write(buildCommonList(), CsvWriters.filePath(path));
     }
 
     /**

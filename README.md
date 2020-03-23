@@ -47,9 +47,9 @@
 
 - 支持特殊字符转义
 
-### v0.0.7 变更
+### v0.0.8 变更
 
-- 修复生成序列号标识字段问题
+- 新增 CsvHelper 工具类，简化操作
 
 # 快速开始
 
@@ -65,11 +65,53 @@ maven 3.x
 <dependency>
     <groupId>com.github.houbb</groupId>
     <artifactId>csv</artifactId>
-    <version>0.0.7</version>
+    <version>0.0.8</version>
 </dependency>
 ```
 
 ## 示例代码
+
+### 写入
+
+```java
+final String path = "src\\test\\resources\\helper.csv";
+
+CsvHelper.write(buildCommonList(), CsvWriters.filePath(path));
+```
+
+- 文件生成
+
+```csv
+name,age,score,money,sex,level,id,status,coin
+你好,10,60.0,200.0,true,4,1,Y,1
+```
+
+### 读取
+
+- 读取文件
+
+```java
+final String path = "src\\test\\resources\\common.csv";
+
+List<User> userList = CsvHelper.read(path, User.class);
+Assert.assertEquals("[User{name='你好', age=10, score=60.0, money=200.0, sex=true, level=4, id=1, status=Y, coin=1}]", userList.toString());
+```
+
+- 读取字符串列表
+
+也支持直接读取字符串列表。
+
+```java
+List<String> lines = Arrays.asList("name,age,score,money,sex,level,id,status,coin",
+                "你好,10,60.0,200.0,true,4,1,Y,1");
+
+List<User> userList = CsvHelper.read(lines, User.class);
+Assert.assertEquals("[User{name='你好', age=10, score=60.0, money=200.0, sex=true, level=4, id=1, status=Y, coin=1}]", userList.toString());
+```
+
+### 对象信息
+
+其中使用的属性如下：
 
 - User.java
 
@@ -122,42 +164,6 @@ public class User {
         .status('Y');
         return Arrays.asList(user);
     }
-```
-
-### 写入
-
-- 测试代码
-
-```java
-public void commonTest() {
-    final String path = "src\\test\\resources\\common.csv";
-    CsvWriteBs.newInstance(path)
-            .write(buildCommonList());
-}
-```
-
-- 文件生成
-
-```csv
-name,age,score,money,sex,level,id,status,coin
-你好,10,60.0,200.0,true,4,1,Y,1
-```
-
-### 读取
-
-```java
-public void commonTest() {
-    final String path = "src\\test\\resources\\common.csv";
-    List<User> userList = CsvReadBs.newInstance(path)
-            .read(User.class);
-    System.out.println(userList);
-}
-```
-
-- 日志信息
-
-```
-[User{name='你好', age=10, score=60.0, money=200.0, sex=true, level=4, id=1, status=Y, coin=1}]
 ```
 
 # 拓展阅读

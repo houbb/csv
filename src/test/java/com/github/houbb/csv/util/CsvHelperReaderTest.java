@@ -13,7 +13,7 @@ import java.util.List;
  * @since 0.0.8
  */
 @Ignore
-public class CsvHelperTest {
+public class CsvHelperReaderTest {
 
     /**
      * 读取列表
