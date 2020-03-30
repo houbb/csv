@@ -27,6 +27,13 @@ public interface IWriteContext<T> {
     boolean writeHead();
 
     /**
+     * 是否写入 bom 头
+     * @return 是否
+     * @since 0.0.9
+     */
+    boolean writeBom();
+
+    /**
      * 排序方式
      * @return 排序方式
      */

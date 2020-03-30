@@ -2,6 +2,7 @@ package com.github.houbb.csv.support.writer.impl;
 
 import com.github.houbb.csv.exception.CsvException;
 import com.github.houbb.csv.support.writer.ICsvWriter;
+import com.github.houbb.csv.support.writer.ICsvWriterContext;
 import com.github.houbb.csv.util.CsvBomUtil;
 import com.github.houbb.heaven.annotation.ThreadSafe;
 import com.github.houbb.heaven.constant.CharsetConst;
@@ -47,11 +48,11 @@ public class CsvWriterFilePath implements ICsvWriter {
     /**
      * 针对字符串列表的写入
      *
-     * @param list 列表
+     * @param context 上下文
      * @since 0.0.8
      */
     @Override
-    public void write(final List<String> list) {
+    public void write(final ICsvWriterContext context) {
         try {
             // 父类文件夹创建
             //2. 统一写入文件
@@ -73,15 +74,26 @@ public class CsvWriterFilePath implements ICsvWriter {
                     throw new CsvException("File create failed!");
                 }
             }
-            // 默认写入 bom
 
             //2.3 写入（首先记录状态，然后写入信息）
             // 2.3.1 写入 bom 头(默认清空文件内容)
+            // 只有文件为空时才进行写入
             final byte[] bomBytes = CsvBomUtil.getBom(charset);
-            Files.write(path, bomBytes, StandardOpenOption.TRUNCATE_EXISTING);
+            boolean needWriteBoom = context.writeBom() && file.length() <= 0;
+            if (needWriteBoom) {
+                Files.write(path, bomBytes, StandardOpenOption.APPEND);
+            }
 
-            //2.4 新增的方式写入内容
-            Files.write(path, list, Charset.forName(charset), StandardOpenOption.APPEND);
+            // 2.4 写入头信息
+            final List<String> writeList = context.list();
+            // 只有头信息不存在时，才重复写入头信息。
+            boolean needWriteHead = context.writeHead() && file.length() <= bomBytes.length;
+            if(needWriteHead) {
+                writeList.add(0, context.head());
+            }
+
+            //2.5 新增的方式写入内容
+            Files.write(path, writeList, Charset.forName(charset), StandardOpenOption.APPEND);
         } catch (IOException e) {
             throw new CsvException(e);
         }

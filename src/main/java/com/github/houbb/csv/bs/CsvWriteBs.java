@@ -5,7 +5,6 @@ import com.github.houbb.csv.support.context.DefaultWriteContext;
 import com.github.houbb.csv.support.csv.DefaultCsv;
 import com.github.houbb.csv.support.writer.ICsvWriter;
 import com.github.houbb.csv.support.writer.impl.CsvWriterNone;
-import com.github.houbb.heaven.constant.CharsetConst;
 import com.github.houbb.heaven.support.instance.impl.Instances;
 import com.github.houbb.heaven.support.sort.ISort;
 import com.github.houbb.heaven.support.sort.impl.NoSort;
@@ -25,6 +24,12 @@ public final class CsvWriteBs {
      * @since 0.0.1
      */
     private boolean writeHead = true;
+
+    /**
+     * 是否写入 bom 头
+     * @since 0.0.9
+     */
+    private boolean writeBom = true;
 
     /**
      * csv 写入类操作
@@ -80,6 +85,17 @@ public final class CsvWriteBs {
     }
 
     /**
+     * 设置是否写入 bom
+     * @param writeBom 写入 bom
+     * @return this
+     * @since 0.0.9
+     */
+    public CsvWriteBs writeBom(boolean writeBom) {
+        this.writeBom = writeBom;
+        return this;
+    }
+
+    /**
      * 排序实现
      * @param sort 排序实现
      * @return this
@@ -127,6 +143,7 @@ public final class CsvWriteBs {
         DefaultWriteContext<T> context = new DefaultWriteContext<>();
         context.list(list)
                 .writeHead(writeHead)
+                .writeBom(writeBom)
                 .sort(sort)
                 .escape(escape)
                 .writer(writer)

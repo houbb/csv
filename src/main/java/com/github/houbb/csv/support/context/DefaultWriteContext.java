@@ -27,6 +27,12 @@ public class DefaultWriteContext<T> implements IWriteContext<T> {
     private boolean writeHead;
 
     /**
+     * 是否写入 bom 头
+     * @since 0.0.9
+     */
+    private boolean writeBom;
+
+    /**
      * 排序算法
      * @since 0.0.8
      */
@@ -61,6 +67,16 @@ public class DefaultWriteContext<T> implements IWriteContext<T> {
 
     public DefaultWriteContext<T> writeHead(boolean writeHead) {
         this.writeHead = writeHead;
+        return this;
+    }
+
+    @Override
+    public boolean writeBom() {
+        return writeBom;
+    }
+
+    public DefaultWriteContext<T> writeBom(boolean writeBom) {
+        this.writeBom = writeBom;
         return this;
     }
 

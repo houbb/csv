@@ -11,6 +11,7 @@ import com.github.houbb.csv.support.context.SingleWriteContext;
 import com.github.houbb.csv.support.convert.read.entry.EntryReadConverter;
 import com.github.houbb.csv.support.convert.write.entry.EntryWriteConverter;
 import com.github.houbb.csv.support.writer.ICsvWriter;
+import com.github.houbb.csv.support.writer.impl.CsvWriterContext;
 import com.github.houbb.csv.util.CsvFieldUtil;
 import com.github.houbb.heaven.annotation.ThreadSafe;
 import com.github.houbb.heaven.constant.PunctuationConst;
@@ -53,19 +54,11 @@ public class DefaultCsv<T> implements ICsv<T> {
             return Collections.emptyList();
         }
 
-        // 2.1 默认额外+1行，用于存储头信息
-        final int size = context.list().size() + 1;
+        // 2.1 存储字符串列表
+        final int size = context.list().size();
         List<String> list = Guavas.newArrayList(size);
 
-        // 2.2 写入头信息
-        final boolean needWriteHead = context.writeHead();
-        if (needWriteHead) {
-            // 只有头信息不存在时，才重复写入头信息。
-            String headLine = buildWriteHead(fieldBeanList);
-            list.add(headLine);
-        }
-
-        // 2.3 构建每一行的内容
+        // 2.2 构建每一行的内容
         EntryWriteConverter entryWriteConverter = new EntryWriteConverter();
         SingleWriteContext singleWriteContext = SingleWriteContext.newInstance()
                 .sort(context.sort())
@@ -81,9 +74,23 @@ public class DefaultCsv<T> implements ICsv<T> {
             list.add(writeLine);
         }
 
-        // 2.4 处理字符串列表
+        // 2.3 处理字符串列表
         final ICsvWriter csvWriter = context.writer();
-        csvWriter.write(list);
+        final CsvWriterContext csvWriterContext = CsvWriterContext.newInstance()
+                .writeBom(context.writeBom())
+                .writeHead(context.writeHead())
+                .list(list);
+
+        // 2.4 写入头信息
+        final boolean needWriteHead = context.writeHead();
+        if (needWriteHead) {
+            // 只有需要写入时，才进行计算。
+            String headLine = buildWriteHead(fieldBeanList);
+            csvWriterContext.head(headLine);
+        }
+
+        //2.5 执行写入
+        csvWriter.write(csvWriterContext);
 
         //3. 返回结果列表
         return list;

@@ -47,9 +47,11 @@
 
 - 支持特殊字符转义
 
-### v0.0.8 变更
+### v0.0.9 变更
 
-- 新增 CsvHelper 工具类，简化操作
+- write() 写入文件方式调整
+
+多次写入相同文件时，默认使用 APPEND 的方式对内容进行追加。
 
 # 快速开始
 
@@ -65,7 +67,7 @@ maven 3.x
 <dependency>
     <groupId>com.github.houbb</groupId>
     <artifactId>csv</artifactId>
-    <version>0.0.8</version>
+    <version>0.0.9</version>
 </dependency>
 ```
 
@@ -181,3 +183,13 @@ public class User {
 [04-CSV 内嵌对象使用](doc/user/04-csv-支持内嵌对象.md)
 
 [05-CSV 内嵌对象使用](doc/user/05-csv-特殊字符转义.md)
+
+# 后期 road-map
+
+- 引入 `@Order` 注解或者新增 `order()` 注解属性
+
+避免 java 反射存在的字段顺序和声明顺序不一致问题
+
+- 使用 converter 项目统一优化
+
+读写转换等操作统一复用。
