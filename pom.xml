@@ -28,7 +28,7 @@
         <heaven.version>0.1.96</heaven.version>
 
         <!--============================== OTHER ==============================-->
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
     </properties>
 
     <dependencyManagement>
