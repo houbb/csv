@@ -54,4 +54,16 @@ public final class CsvConst {
      */
     public static final int DEFAULT_END_INDEX = Integer.MAX_VALUE;
 
+    /**
+     * 映射分割符号
+     * @since 0.1.0
+     */
+    public static final String MAPPING_SPLITTER = ";";
+
+    /**
+     * 每一组元素的分割符号
+     * @since 0.1.0
+     */
+    public static final String MAPPING_UNIT_SPLITTER = ":";
+
 }

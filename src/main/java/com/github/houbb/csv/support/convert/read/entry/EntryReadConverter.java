@@ -3,6 +3,7 @@ package com.github.houbb.csv.support.convert.read.entry;
 import com.github.houbb.csv.annotation.Csv;
 import com.github.houbb.csv.api.IReadConverter;
 import com.github.houbb.csv.support.context.SingleReadContext;
+import com.github.houbb.csv.support.convert.mapping.ReadMappingConverter;
 import com.github.houbb.csv.support.convert.read.CommonReadConverter;
 import com.github.houbb.csv.util.CsvFieldUtil;
 import com.github.houbb.heaven.annotation.ThreadSafe;
@@ -98,7 +99,16 @@ public class EntryReadConverter<T> implements IReadConverter<T> {
             // 指定转换器的处理
             if (field.isAnnotationPresent(Csv.class)) {
                 Csv csv = field.getAnnotation(Csv.class);
+                context.csv(csv);
                 Class<? extends IReadConverter> readConverterClass = csv.readConverter();
+
+                // 优先使用 readMapping
+                String readMapping = csv.readMapping();
+                if(StringUtil.isNotEmpty(readMapping)
+                    && field.getType().equals(String.class)) {
+                    readConverterClass = ReadMappingConverter.class;
+                }
+
                 return readConverterClass.newInstance().convert(context);
             }
 

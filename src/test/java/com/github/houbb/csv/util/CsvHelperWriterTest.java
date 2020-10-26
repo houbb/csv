@@ -1,6 +1,7 @@
 package com.github.houbb.csv.util;
 
 import com.github.houbb.csv.model.User;
+import com.github.houbb.csv.model.UserMapping;
 import com.github.houbb.csv.support.reader.impl.CsvReaders;
 import com.github.houbb.csv.support.writer.impl.CsvWriters;
 import org.junit.Assert;
@@ -8,6 +9,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -34,6 +36,17 @@ public class CsvHelperWriterTest {
         final String path = "src\\test\\resources\\helper.csv";
 
         CsvHelper.write(buildCommonList(), CsvWriters.filePath(path));
+    }
+
+    /**
+     * @since 0.1.0
+     */
+    @Test
+    public void writeMappingTest() {
+        UserMapping userMapping = new UserMapping();
+        userMapping.status("S");
+
+        CsvHelper.write(Collections.singletonList(userMapping), CsvWriters.filePath("src\\test\\resources\\mapping.csv"));
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.github.houbb.csv.util;
 
 import com.github.houbb.csv.model.User;
+import com.github.houbb.csv.model.UserMapping;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -38,6 +39,18 @@ public class CsvHelperReaderTest {
 
         List<User> userList = CsvHelper.read(path, User.class);
         Assert.assertEquals("[User{name='你好', age=10, score=60.0, money=200.0, sex=true, level=4, id=1, status=Y, coin=1}]", userList.toString());
+    }
+
+    /**
+     * 映射列表
+     * @since 0.1.0
+     */
+    @Test
+    public void readMappingTest() {
+        final String path = "src\\test\\resources\\mapping.csv";
+
+        List<UserMapping> userList = CsvHelper.read(path, UserMapping.class);
+        Assert.assertEquals("[UserMapping{status='S'}]", userList.toString());
     }
 
 }

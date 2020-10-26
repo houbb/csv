@@ -1,5 +1,6 @@
 package com.github.houbb.csv.support.context;
 
+import com.github.houbb.csv.annotation.Csv;
 import com.github.houbb.heaven.support.sort.ISort;
 
 import java.lang.reflect.Field;
@@ -63,6 +64,12 @@ public class SingleWriteContext {
      */
     private boolean escape;
 
+    /**
+     * 注解信息
+     * @since 0.1.0
+     */
+    private Csv csv;
+
     public ISort sort() {
         return sort;
     }
@@ -114,6 +121,15 @@ public class SingleWriteContext {
 
     public SingleWriteContext escape(boolean escape) {
         this.escape = escape;
+        return this;
+    }
+
+    public Csv csv() {
+        return csv;
+    }
+
+    public SingleWriteContext csv(Csv csv) {
+        this.csv = csv;
         return this;
     }
 }

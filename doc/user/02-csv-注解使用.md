@@ -35,6 +35,29 @@
      * @return 处理实现类
      */
     Class<? extends IWriteConverter> writeConverter() default StringWriteConverter.class;
+
+    /**
+     * 读映射
+     *
+     * S:成功;F:失败
+     * 枚举值用 ; 分割，映射用 : 分割。
+     *
+     * 优先级：相比较 readConverter 优先使用 readMapping，如果值不为空，且当前字段的值为 String，才进行处理。否则忽略。
+     * 注意：必须要有 : 分割符号，否则报错。只对 String 类型字段生效。
+     * @return 读
+     * @since 0.1.0
+     */
+    String readMapping() default "";
+
+    /**
+     * 写映射
+     *
+     * 优先级：相比较 writeConverter 优先使用 writeMapping，如果值不为空，且当前字段的值为 String，才进行处理。否则忽略。
+     * 注意：必须要有 : 分割符号，否则报错。只对 String 类型字段生效。
+     * @return 映射结果
+     * @since 0.1.0
+     */
+    String writeMapping() default "";
 ```
 
 ## 属性概览表
@@ -46,6 +69,8 @@
 | writeRequire | true | 当前字段是否需要写入 csv 文件 |
 | readConverter | CommonReadConverter | 将 csv 中的字符串转化为当前字段类型，支持 8 大基本类型+String |
 | writeConverter | StringWriteConverter | 直接调用当前字段值 toString() 方法，null 直接为空字符串 |
+| readMapping | "" | 读取时的枚举值映射 |
+| writeMapping | "" | 写入时的枚举值映射 |
 
 其中 readConverter/writeConverter 支持用户自定义
 
@@ -156,3 +181,51 @@ public void annotationTest() {
 ```
 [UserAnnotation{name='你好', password='null', birthday=Mon Jun 03 00:00:00 CST 2019}]
 ```
+
+# 枚举映射
+
+## 对象定义
+
+```java
+public class UserMapping {
+
+    @Csv(readMapping = "S:成功;F:失败", writeMapping = "S:成功;F:失败")
+    private String status;
+    
+    //getter/setter/toString()
+
+}
+```
+
+这种方法适合快速的枚举导出，如果比较复杂，可以使用对应的 converter 即可。
+
+## 写入
+
+```java
+UserMapping userMapping = new UserMapping();
+userMapping.status("S");
+
+CsvHelper.write(Collections.singletonList(userMapping), CsvWriters.filePath("src\\test\\resources\\mapping.csv"));
+```
+
+输出文件效果
+
+```
+status
+成功
+```
+
+枚举值 S 被映射成了成功。
+
+## 读取
+
+有写入，就有对应的读取。
+
+```java
+final String path = "src\\test\\resources\\mapping.csv";
+
+List<UserMapping> userList = CsvHelper.read(path, UserMapping.class);
+Assert.assertEquals("[UserMapping{status='S'}]", userList.toString());
+```
+
+可以把成功映射为 S，便于一些枚举值的映射处理和存储。

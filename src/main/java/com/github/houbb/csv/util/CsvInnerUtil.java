@@ -2,10 +2,12 @@ package com.github.houbb.csv.util;
 
 import com.github.houbb.csv.constant.CsvConst;
 import com.github.houbb.csv.constant.CsvEscapeConst;
+import com.github.houbb.csv.exception.CsvException;
 import com.github.houbb.heaven.constant.PunctuationConst;
 import com.github.houbb.heaven.util.lang.CharUtil;
 import com.github.houbb.heaven.util.lang.StringUtil;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -94,6 +96,36 @@ public final class CsvInnerUtil {
             return CharUtil.repeat(CsvConst.ENTRY_SPLIT_UNIT_CHAR, times);
         }
         throw new UnsupportedOperationException("暂时不支持的分隔符!");
+    }
+
+
+    /**
+     * 获取映射 map
+     * @param mapping 映射信息
+     * @return map
+     * @since 0.1.0
+     */
+    public static Map<String, String> getMappingMap(final String mapping) {
+        if(StringUtil.isEmpty(mapping)) {
+            return Collections.emptyMap();
+        }
+
+        //; 分割
+        //: 继续分割
+        // 这里可以使用 cache 提升性能
+        String[] entryArray = mapping.split(CsvConst.MAPPING_SPLITTER);
+        Map<String, String> map = new HashMap<>(entryArray.length);
+        for(String entry : entryArray) {
+            String[] mappings = entry.split(CsvConst.MAPPING_UNIT_SPLITTER);
+
+            if(mappings.length != 2) {
+                throw new CsvException("枚举映射必须使用单个【:】进行分割。");
+            }
+
+            map.put(mappings[0], mappings[1]);
+        }
+
+        return map;
     }
 
 }

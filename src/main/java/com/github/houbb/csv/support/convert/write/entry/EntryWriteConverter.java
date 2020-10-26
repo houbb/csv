@@ -5,6 +5,7 @@ import com.github.houbb.csv.api.IWriteConverter;
 import com.github.houbb.csv.constant.CsvConst;
 import com.github.houbb.csv.constant.CsvOperateType;
 import com.github.houbb.csv.support.context.SingleWriteContext;
+import com.github.houbb.csv.support.convert.mapping.WriteMappingConverter;
 import com.github.houbb.csv.support.convert.write.CommonWriteConverter;
 import com.github.houbb.csv.util.CsvFieldUtil;
 import com.github.houbb.csv.util.CsvInnerUtil;
@@ -74,10 +75,6 @@ public class EntryWriteConverter implements IWriteConverter {
         IWriteConverter converter = Instances.singleton(CommonWriteConverter.class);
         try {
             for (FieldBean bean : fieldBeans) {
-                final Optional<Csv> csvOptional = bean.annotationOptByType(Csv.class);
-                if (csvOptional.isPresent()) {
-                    converter = csvOptional.get().writeConverter().newInstance();
-                }
                 final Object object = bean.field().get(t);
                 // 上下文的处理
                 SingleWriteContext entryContext = SingleWriteContext.newInstance()
@@ -87,6 +84,20 @@ public class EntryWriteConverter implements IWriteConverter {
                         .sort(context.sort())
                         .split(CsvConst.COMMA)
                         .escape(context.escape());
+
+                final Optional<Csv> csvOptional = bean.annotationOptByType(Csv.class);
+                if (csvOptional.isPresent()) {
+                    Csv csv = csvOptional.get();
+                    entryContext.csv(csv);
+                    converter = csv.writeConverter().newInstance();
+
+                    // 优先使用 writeMapping
+                    if(StringUtil.isNotEmpty(csv.writeMapping())
+                        && (object instanceof String)) {
+                        converter = new WriteMappingConverter();
+                    }
+                }
+
                 String string = converter.convert(entryContext);
                 stringList.add(string);
             }
