@@ -67,8 +67,36 @@ maven 3.x
 <dependency>
     <groupId>com.github.houbb</groupId>
     <artifactId>csv</artifactId>
-    <version>0.0.9</version>
+    <version>0.2.0</version>
 </dependency>
+```
+
+## 朴素的读写
+
+直接转换为 string list.
+
+```java
+final String path = "stringlist.csv";
+final String target = "stringlist2.csv";
+
+List<List<String>> dataList = CsvStringListHelper.read(path);
+System.out.println(dataList);
+
+CsvStringListHelper.write(target, dataList);
+```
+
+- stringlist.csv
+
+```csv
+id,name,age
+1,"user,1",10
+2,"user,1",201
+```
+
+- dataList 字符串列表
+
+```
+[[id, name, age], [1, user,1, 10], [2, user,1, 201]]
 ```
 
 ## 示例代码

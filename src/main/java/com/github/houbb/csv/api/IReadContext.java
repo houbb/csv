@@ -50,4 +50,11 @@ public interface IReadContext<T> {
      */
     boolean escape();
 
+    /**
+     * 引用字符
+     * @return 字符
+     * @since 0.2.0
+     */
+    char quoteChar();
+
 }

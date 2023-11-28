@@ -1,8 +1,10 @@
 package com.github.houbb.csv.bs;
 
 import com.github.houbb.csv.api.ICsv;
+import com.github.houbb.csv.constant.CsvConfigConst;
 import com.github.houbb.csv.support.context.DefaultWriteContext;
 import com.github.houbb.csv.support.csv.DefaultCsv;
+import com.github.houbb.csv.support.csv.DefaultStringListCsv;
 import com.github.houbb.csv.support.writer.ICsvWriter;
 import com.github.houbb.csv.support.writer.impl.CsvWriterNone;
 import com.github.houbb.heaven.support.instance.impl.Instances;
@@ -58,6 +60,12 @@ public final class CsvWriteBs {
      * @since 0.0.8
      */
     private ICsv csv = Instances.singleton(DefaultCsv.class);
+
+    /**
+     * 引用字符
+     * @since 0.2.0
+     */
+    private char quoteChar = CsvConfigConst.DEFAULT_QUOTE_CHAR;
 
     /**
      * 私有化构造器
@@ -132,6 +140,11 @@ public final class CsvWriteBs {
         return this;
     }
 
+    public CsvWriteBs quoteChar(char quoteChar) {
+        this.quoteChar = quoteChar;
+        return this;
+    }
+
     /**
      * 将指定列表的内容写入到文件中
      * @param list 列表
@@ -147,9 +160,29 @@ public final class CsvWriteBs {
                 .sort(sort)
                 .escape(escape)
                 .writer(writer)
+                .quoteChar(quoteChar)
                 ;
 
         return csv.write(context);
+    }
+
+    /**
+     * @since 0.2.0
+     * @param list 列表
+     */
+    public void writeStringList(List<List<String>> list) {
+        DefaultWriteContext<List<String>> context = new DefaultWriteContext<>();
+        context.list(list)
+                .writeHead(writeHead)
+                .writeBom(writeBom)
+                .sort(sort)
+                .escape(escape)
+                .writer(writer)
+                .quoteChar(quoteChar)
+        ;
+
+        ICsv<List<String>> csv = new DefaultStringListCsv();
+        csv.write(context);
     }
 
 }

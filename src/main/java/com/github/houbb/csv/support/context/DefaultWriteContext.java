@@ -50,6 +50,11 @@ public class DefaultWriteContext<T> implements IWriteContext<T> {
      */
     private boolean escape;
 
+    /**
+     * @since 0.2.0
+     */
+    private char quoteChar;
+
     @Override
     public ICsvWriter writer() {
         return writer;
@@ -107,6 +112,16 @@ public class DefaultWriteContext<T> implements IWriteContext<T> {
 
     public DefaultWriteContext<T> escape(boolean escape) {
         this.escape = escape;
+        return this;
+    }
+
+    @Override
+    public char quoteChar() {
+        return quoteChar;
+    }
+
+    public DefaultWriteContext<T> quoteChar(char quoteChar) {
+        this.quoteChar = quoteChar;
         return this;
     }
 }

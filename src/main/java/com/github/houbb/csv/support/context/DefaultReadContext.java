@@ -28,6 +28,8 @@ public class DefaultReadContext<T> implements IReadContext<T> {
 
     private boolean escape;
 
+    private char quoteChar;
+
     public DefaultReadContext<T> newInstance() {
         return new DefaultReadContext<>();
     }
@@ -87,8 +89,19 @@ public class DefaultReadContext<T> implements IReadContext<T> {
         return escape;
     }
 
+
     public DefaultReadContext<T> escape(boolean escape) {
         this.escape = escape;
         return this;
     }
+
+    public char quoteChar() {
+        return quoteChar;
+    }
+
+    public DefaultReadContext<T> quoteChar(char quoteChar) {
+        this.quoteChar = quoteChar;
+        return this;
+    }
+
 }

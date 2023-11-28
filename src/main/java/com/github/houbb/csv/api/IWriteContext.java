@@ -52,4 +52,11 @@ public interface IWriteContext<T> {
      */
     boolean escape();
 
+    /**
+     * 引用字符
+     * @since 0.2.0
+     * @return 引用字符
+     */
+    char quoteChar();
+
 }

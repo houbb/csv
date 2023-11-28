@@ -1,9 +1,11 @@
 package com.github.houbb.csv.bs;
 
 import com.github.houbb.csv.api.ICsv;
+import com.github.houbb.csv.constant.CsvConfigConst;
 import com.github.houbb.csv.constant.CsvConst;
 import com.github.houbb.csv.support.context.DefaultReadContext;
 import com.github.houbb.csv.support.csv.DefaultCsv;
+import com.github.houbb.csv.support.csv.DefaultStringListCsv;
 import com.github.houbb.csv.support.reader.ICsvReader;
 import com.github.houbb.heaven.support.instance.impl.Instances;
 import com.github.houbb.heaven.support.sort.ISort;
@@ -41,6 +43,12 @@ public final class CsvReadBs {
      * @since 0.0.6
      */
     private boolean escape = false;
+
+    /**
+     * 引用字符
+     * @since 0.2.0
+     */
+    private char quoteChar = CsvConfigConst.DEFAULT_QUOTE_CHAR;
 
     /**
      * 无任何排序实现
@@ -116,6 +124,11 @@ public final class CsvReadBs {
         return this;
     }
 
+    public CsvReadBs quoteChar(char quoteChar) {
+        this.quoteChar = quoteChar;
+        return this;
+    }
+
     /**
      * 将指定文件的内容读取到列表中
      * @param tClass 类型
@@ -131,8 +144,29 @@ public final class CsvReadBs {
                 .sort(sort)
                 .readClass(tClass)
                 .escape(escape)
+                .quoteChar(quoteChar)
                 ;
 
+        return csv.read(context);
+    }
+
+    /**
+     * 将指定文件的内容读取到列表中
+     * @return 列表
+     * @since 0.2.0
+     */
+    @SuppressWarnings("unchecked")
+    public List<List<String>> readStringList() {
+        DefaultReadContext<List<String>> context = new DefaultReadContext<>();
+        context.reader(reader)
+                .startIndex(startIndex)
+                .endIndex(endIndex)
+                .sort(sort)
+                .escape(escape)
+                .quoteChar(quoteChar)
+        ;
+
+        ICsv<List<String>> csv = new DefaultStringListCsv();
         return csv.read(context);
     }
 
